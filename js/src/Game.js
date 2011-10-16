@@ -204,7 +204,7 @@ console.log(a,b,c);
 			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox , oy , dx - ox , dy - oy );
 			},
 			drawBackground = function(){
-			  _.each( updateList , function( i ){
+			  _.each( _.uniq( updateList ) , function( i ){
 				var tilecoords = Stage.getCoordsFor( i ) ,
 				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox = tilecoords.x * tx ,
@@ -218,6 +218,8 @@ console.log(a,b,c);
 				  ox = pc.x * tx ,
 				  oy = pc.y * ty;
 			  drawTile( ox , oy , ox + tx , oy + ty , 'P' );
+			  // set current position for redraw
+			  Renderer.queueForUpdate( Stage.getIndexFor( pc ) );
 			},
 			render = function(){
 			  map = Stage.getMap();
@@ -320,6 +322,10 @@ console.log(a,b,c);
 			facing = 'down',
 			move = function(){
 			  var vect = moving;
+			  // push current position to redraw list
+			  if( vect[ 0 ] !== 0 || vect[ 1 ] !== 0 ){
+				Renderer.queueForUpdate( Stage.getIndexFor( pos ) );
+			  }
 			  // move in the vector sent
 			  var newCoords = { x: pos.x + vect[0] , y: pos.y + vect[1] };
 			  // check position valid
@@ -365,8 +371,6 @@ console.log(a,b,c);
 		var listen = function(){
 		  jQuery( document ).keydown( function(e){
 			var which = String.fromCharCode( e.which ).toLowerCase();
-			// set current position for redraw
-			Renderer.queueForUpdate( Stage.getIndexFor( Player.getPosition() ) );
 			switch( which ){
 			  case 'w':
 				Player.setMovement(1,-1);
