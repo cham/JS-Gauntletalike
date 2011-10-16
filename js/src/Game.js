@@ -45,21 +45,20 @@
 
 		var tileinfopath = 'maps/tilesets/chaosengine.json' ,
 			mappath ,characterpath = '' ,
-			maptiledims , charactertiledims ,
+			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
 			charactersprite = document.createElement( 'canvas' ) ,
 			floors , walls ,
-			scaling = -1 ,
 			playerstates = {},
 			/**
 			 * load
 			 * load and parse the tileset description, then load the associated sprites, then run the given callback
 			 *
 			 * @function undefined
-			 * @param {Function} cb
+			 * @param {Function} cb the callback to run when loaded
 			 */
 			load = function( cb ){
-			  var count = 2;
+			  var count = 2; // number of images still to load
 			  jQuery.ajax({
 				url: tileinfopath ,
 				dataType: 'json',
@@ -69,26 +68,22 @@
 				  // set local vars
 				  mappath = data.mappath;
 				  characterpath = data.characterpath;
-				  maptiledims = data.maptiledims;
-				  charactertiledims = data.charactertiledims;
+				  pixel_dims = data.tilepixeldims;
 				  floors = data.floors;
 				  walls = data.walls;
 				  playerstates = data.playerstates;
-				  scaling = 4;
-console.log( scaling );
 				  // load images, onload create canvas elements and execute cb when both done
 				  mapimg.onload = function(){
 					var ctx = mapsprite.getContext( '2d' );
-					mapsprite.width = this.naturalWidth * scaling;
-					mapsprite.height = this.naturalHeight * scaling;
-					ctx.drawImage( this , 0 , 0 , this.naturalWidth , this.naturalHeight , 0 , 0 , mapsprite.width , mapsprite.height );
-					//ctx.scale( 2 , 2 );
+					mapsprite.width = this.naturalWidth;
+					mapsprite.height = this.naturalHeight;
+					ctx.drawImage( this , 0 , 0 , this.naturalWidth , this.naturalHeight );
 					count--; if( !count && cb ){ cb(); }
 				  };
 				  characterimg.onload = function(){
 					charactersprite.width = this.naturalWidth;
 					charactersprite.height = this.naturalHeight;
-					charactersprite.getContext( '2d' ).drawImage( this , 0 , 0 , this.naturalWidth , this.naturalHeight , 0 , 0 , charactersprite.width , charactersprite.height );
+					charactersprite.getContext( '2d' ).drawImage( this , 0 , 0 , this.naturalWidth , this.naturalHeight );
 					count--; if( !count && cb ){ cb(); }
 				  };
 				  mapimg.src = mappath;
@@ -113,36 +108,37 @@ console.log(a,b,c);
 				playerfacing = Player.getDirectionFacing();
 			  switch( tiletype ){
 				case 'floor':
-				  return { canvas: mapsprite , x: floors[ floorind ].x , y: floors[ floorind ].y , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: floors[ floorind ].x , y: floors[ floorind ].y , tiledims: pixel_dims };
 				  break;
 				case 'wall':
-				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
 				  break;
 				case 'wall_entrance':
-				  return { canvas: mapsprite , x: 171 , y: 18 , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: 171 , y: 18 , tiledims: pixel_dims };
 				  break;
 				case 'player':
-				  return { canvas: charactersprite , x: ~~( playerstates[playerfacing].x / scaling ) , y: ~~( playerstates[playerfacing].y / scaling ) , tiledims: { x: ~~( charactertiledims.x / scaling ) , y: ~~( charactertiledims.y / scaling ) } };
+				  return { canvas: charactersprite , x: playerstates[playerfacing].x  , y: playerstates[playerfacing].y , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_tl':
-				  return { canvas: mapsprite , x: 273 , y: 239 , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: 273 , y: 239 , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_tr':
-				  return { canvas: mapsprite , x: 290 , y: 239 , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: 290 , y: 239 , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_bl':
-				  return { canvas: mapsprite , x: 273 , y: 256 , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: 273 , y: 256 , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_br':
-				  return { canvas: mapsprite , x: 290 , y: 256 , tiledims: maptiledims };
+				  return { canvas: mapsprite , x: 290 , y: 256 , tiledims: pixel_dims };
 				  break;
 			  }
-			  return { canvas: mapsprite , x: 290 , y: 290 , tiledims: maptiledims };
+			  return { canvas: mapsprite , x: 290 , y: 290 , tiledims: pixel_dims };
 			};
 
 		return {
 		  load:load,
-		  getSpriteInfo:getSpriteInfo
+		  getSpriteInfo:getSpriteInfo,
+		  getPixelDims: function(){ return pixel_dims; }
 		};
 
 	  })(),
@@ -157,8 +153,9 @@ console.log(a,b,c);
 
 		var map ,
 			ctx ,
+			pixeldims ,
 			clear = function(){
-			  ctx.clearRect( 0 , 0 , ( map.mapdims.x * map.tiledims.x ) , ( map.mapdims.y * map.tiledims.y ) );
+			  ctx.clearRect( 0 , 0 , ( map.mapdims.x * pixeldims.x ) , ( map.mapdims.y * pixeldims.y ) );
 			},
 			drawTile = function( ox , oy , dx , dy , tileType , tileIndex ){
 			  var spriteInfo , chunk;
@@ -191,15 +188,14 @@ console.log(a,b,c);
 				  spriteInfo = Tileset.getSpriteInfo( 'decoration_valve_br' );
 				  break;
 			  }
-			  var ratio = 4;
-			  chunk = spriteInfo.canvas.getContext( '2d' ).getImageData( spriteInfo.x * ratio , spriteInfo.y * ratio , spriteInfo.tiledims.x * ratio , spriteInfo.tiledims.y * ratio );
-			  ctx.putImageData( chunk , ox , oy );
-//			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox , oy , dx - ox , dy - oy );
+			  //chunk = spriteInfo.canvas.getContext( '2d' ).getImageData( spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x , spriteInfo.tiledims.y );
+			  //ctx.putImageData( chunk , ox , oy );
+			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox , oy , dx - ox , dy - oy );
 			},
 			drawBackground = function(){
 			  _.each( map.mapdata , function( tile , i ){
 				var tilecoords = Stage.getCoordsFor( i ) ,
-				  tx = map.tiledims.x , ty = map.tiledims.y ,
+				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox = tilecoords.x * tx ,
 				  oy = tilecoords.y * ty;
 				drawTile( ox , oy , ox + tx , oy + ty , tile , i );
@@ -207,7 +203,7 @@ console.log(a,b,c);
 			},
 			drawPlayer = function(){
 			  var pc = Player.getPosition() ,
-				  tx = map.tiledims.x , ty = map.tiledims.y ,
+				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox = pc.x * tx ,
 				  oy = pc.y * ty;
 			  drawTile( ox , oy , ox + tx , oy + ty , 'P' );
@@ -215,6 +211,7 @@ console.log(a,b,c);
 			render = function(){
 			  map = Stage.getMap();
 			  ctx = Stage.getContext();
+			  pixeldims = Tileset.getPixelDims();
 			  // clear
 			  clear();
 			  // draw background
@@ -251,9 +248,10 @@ console.log(a,b,c);
 			  MapProvider.getLevel( lnum , function( mapObj ){
 				// set map
 				map = mapObj;
+				pixelsdims = Tileset.getPixelDims();
 				// set stge width and height
-				stageDims.width = ( map.mapdims.x * map.tiledims.x );
-				stageDims.height = ( map.mapdims.y * map.tiledims.y );
+				stageDims.width = ( map.mapdims.x * pixelsdims.x );
+				stageDims.height = ( map.mapdims.y * pixelsdims.y );
 				// make a new canvas for the given map
 				makeCanvas( stageDims.width , stageDims.height );
 				// pass to dom
@@ -405,10 +403,10 @@ console.log(a,b,c);
 				  // move player to entrance
 				  Player.moveToEntrance();
 				  // move player and render frame every frametime ms
-				  window.setTimeout( function(){
+				  window.setTimeout( function tick(){
 					Player.move();
 					Renderer.render();
-					window.setTimeout( arguments.callee , frametime );
+					window.setTimeout( tick , frametime );
 				  } , frametime );
 				  // listen for keyboard input
 				  Controller.listen();
