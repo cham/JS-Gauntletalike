@@ -53,7 +53,7 @@
 	   */
 	  Tileset = (function(){
 
-		var tileinfopath = 'maps/tilesets/chaosengine-scaled.json' ,
+		var tileinfopath = 'maps/tilesets/shiningforce.json' ,
 			mappath ,characterpath = '' ,
 			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
