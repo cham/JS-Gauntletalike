@@ -53,7 +53,7 @@
 	   */
 	  Tileset = (function(){
 
-		var tileinfopath = 'maps/tilesets/chaosengine.json' ,
+		var tileinfopath = 'maps/tilesets/chaosengine-scaled.json' ,
 			mappath ,characterpath = '' ,
 			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
@@ -124,21 +124,25 @@ console.log(a,b,c);
 				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
 				  break;
 				case 'wall_entrance':
-				  return { canvas: mapsprite , x: 171 , y: 18 , tiledims: pixel_dims };
+				  return { canvas: mapsprite , x: walls[ 0 ].x , y: walls[ 0 ].y , tiledims: pixel_dims };
 				  break;
 				case 'player':
 				  return { canvas: charactersprite , x: playerstates[playerfacing].x  , y: playerstates[playerfacing].y , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_tl':
+				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
 				  return { canvas: mapsprite , x: 273 , y: 239 , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_tr':
+				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
 				  return { canvas: mapsprite , x: 290 , y: 239 , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_bl':
+				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
 				  return { canvas: mapsprite , x: 273 , y: 256 , tiledims: pixel_dims };
 				  break;
 				case 'decoration_valve_br':
+				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
 				  return { canvas: mapsprite , x: 290 , y: 256 , tiledims: pixel_dims };
 				  break;
 			  }
@@ -416,22 +420,24 @@ console.log(a,b,c);
 
 	  Game = (function(){
 
-		var frametime = 50,
+		var frametime = 40,
 			start = function(){
 			  // load Tileset images
 			  Tileset.load( function(){
 				// once loaded, load the stage data
-				Stage.load( 2 , function(){
+				Stage.load( 1 , function(){
 				  // move player to entrance
 				  Player.moveToEntrance();
 				  // set render list to be whole map
 				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile
 				  // move player and render frame every frametime ms
-				  window.setTimeout( function tick(){
-					Player.move();
-					Renderer.render();
-					window.setTimeout( tick , frametime );
-				  } , frametime );
+				  window.setTimeout(
+					function tick(){
+					  Player.move();
+					  Renderer.render();
+					  window.setTimeout( tick , frametime );
+					}
+				  , frametime );
 				  // listen for keyboard input
 				  Controller.listen();
 				});
