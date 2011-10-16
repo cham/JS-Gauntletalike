@@ -1,0 +1,1 @@
+Gauntlet.Game.start();
