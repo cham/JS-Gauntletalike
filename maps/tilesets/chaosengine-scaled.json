@@ -1,0 +1,17 @@
+{
+    "mappath" : "assets/chaosengine-scaled.png" ,
+    "characterpath" : "assets/players.png" ,
+    "tilepixeldims" : { "x": 36 , "y": 36 },
+    "floors" : [
+      { "x": 0 , "y": 36 }
+    ] ,
+    "walls" : [
+      { "x": 0 , "y": 0 }
+    ],
+    "playerstates" : {
+      "up":{ "x": 332, "y": 21 },
+      "down":{ "x": 332, "y": 181 },
+      "left":{ "x": 332, "y": 261 },
+      "right":{ "x": 332, "y": 101 }
+    }
+}

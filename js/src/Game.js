@@ -58,7 +58,7 @@
 			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
 			charactersprite = document.createElement( 'canvas' ) ,
-			floors , walls ,
+			floors , walls , altWall ,
 			playerstates = {},
 			/**
 			 * load
@@ -81,6 +81,7 @@
 				  pixel_dims = data.tilepixeldims;
 				  floors = data.floors;
 				  walls = data.walls;
+				  altWall = data.alt_wall_1;
 				  playerstates = data.playerstates;
 				  // load images, onload create canvas elements and execute cb when both done
 				  mapimg.onload = function(){
@@ -113,37 +114,52 @@ console.log(a,b,c);
 			 * @param {Number} salt
 			 */
 			getSpriteInfo = function( tiletype , salt ){
-			  var floorind = ( salt % floors.length ) || 0 ,
-				wallind = ( salt % walls.length ) || 0 ,
-				playerfacing = Player.getDirectionFacing();
+			  var playerfacing = Player.getDirectionFacing();
 			  switch( tiletype ){
-				case 'floor':
-				  return { canvas: mapsprite , x: floors[ floorind ].x , y: floors[ floorind ].y , tiledims: pixel_dims };
+				case 'floor_0':
+				  return { canvas: mapsprite , x: floors[ 0 ].x , y: floors[ 0 ].y , tiledims: pixel_dims };
 				  break;
-				case 'wall':
-				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
-				  break;
-				case 'wall_entrance':
+				case 'wall_0':
 				  return { canvas: mapsprite , x: walls[ 0 ].x , y: walls[ 0 ].y , tiledims: pixel_dims };
+				  break;
+				case 'wall_1':
+				  return { canvas: mapsprite , x: walls[ 1 ].x , y: walls[ 1 ].y , tiledims: pixel_dims };
+				  break;
+				case 'wall_2':
+				  return { canvas: mapsprite , x: walls[ 2 ].x , y: walls[ 2 ].y , tiledims: pixel_dims };
+				  break;
+				case 'wall_3':
+				  return { canvas: mapsprite , x: walls[ 3 ].x , y: walls[ 3 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_0':
+				  return { canvas: mapsprite , x: altWall[ 0 ].x , y: altWall[ 0 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_1':
+				  return { canvas: mapsprite , x: altWall[ 1 ].x , y: altWall[ 1 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_2':
+				  return { canvas: mapsprite , x: altWall[ 2 ].x , y: altWall[ 2 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_3':
+				  return { canvas: mapsprite , x: altWall[ 3 ].x , y: altWall[ 3 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_4':
+				  return { canvas: mapsprite , x: altWall[ 4 ].x , y: altWall[ 4 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_5':
+				  return { canvas: mapsprite , x: altWall[ 5 ].x , y: altWall[ 5 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_6':
+				  return { canvas: mapsprite , x: altWall[ 6 ].x , y: altWall[ 6 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_7':
+				  return { canvas: mapsprite , x: altWall[ 7 ].x , y: altWall[ 7 ].y , tiledims: pixel_dims };
+				  break;
+				case 'lake_8':
+				  return { canvas: mapsprite , x: altWall[ 8 ].x , y: altWall[ 8 ].y , tiledims: pixel_dims };
 				  break;
 				case 'player':
 				  return { canvas: charactersprite , x: playerstates[playerfacing].x  , y: playerstates[playerfacing].y , tiledims: pixel_dims };
-				  break;
-				case 'decoration_valve_tl':
-				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
-				  return { canvas: mapsprite , x: 273 , y: 239 , tiledims: pixel_dims };
-				  break;
-				case 'decoration_valve_tr':
-				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
-				  return { canvas: mapsprite , x: 290 , y: 239 , tiledims: pixel_dims };
-				  break;
-				case 'decoration_valve_bl':
-				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
-				  return { canvas: mapsprite , x: 273 , y: 256 , tiledims: pixel_dims };
-				  break;
-				case 'decoration_valve_br':
-				  return { canvas: mapsprite , x: walls[ wallind ].x , y: walls[ wallind ].y , tiledims: pixel_dims };
-				  return { canvas: mapsprite , x: 290 , y: 256 , tiledims: pixel_dims };
 				  break;
 			  }
 			  return { canvas: mapsprite , x: 290 , y: 290 , tiledims: pixel_dims };
@@ -178,29 +194,50 @@ console.log(a,b,c);
 				case 'P':
 				  spriteInfo = Tileset.getSpriteInfo( 'player' );
 				  break;
-				case '1':
-				  spriteInfo = Tileset.getSpriteInfo( 'floor' , tileIndex );
+				case 'f0':
+				  spriteInfo = Tileset.getSpriteInfo( 'floor_0' , tileIndex );
 				  break;
-				case '0':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall' , tileIndex );
+				case 'fe':
+				  spriteInfo = Tileset.getSpriteInfo( 'floor_0' , tileIndex );
 				  break;
-				case 'X':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall_entrance' );
+				case 'w0':
+				  spriteInfo = Tileset.getSpriteInfo( 'wall_0' , tileIndex );
 				  break;
-				case 'E':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall_entrance' );
+				case 'w1':
+				  spriteInfo = Tileset.getSpriteInfo( 'wall_1' , tileIndex );
 				  break;
-				case 'U':
-				  spriteInfo = Tileset.getSpriteInfo( 'decoration_valve_tl' );
+				case 'w2':
+				  spriteInfo = Tileset.getSpriteInfo( 'wall_2' , tileIndex );
 				  break;
-				case 'I':
-				  spriteInfo = Tileset.getSpriteInfo( 'decoration_valve_tr' );
+				case 'w3':
+				  spriteInfo = Tileset.getSpriteInfo( 'wall_3' , tileIndex );
 				  break;
-				case 'J':
-				  spriteInfo = Tileset.getSpriteInfo( 'decoration_valve_bl' );
+				case 'l0':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_0' , tileIndex );
 				  break;
-				case 'K':
-				  spriteInfo = Tileset.getSpriteInfo( 'decoration_valve_br' );
+				case 'l1':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_1' , tileIndex );
+				  break;
+				case 'l2':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_2' , tileIndex );
+				  break;
+				case 'l3':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_3' , tileIndex );
+				  break;
+				case 'l4':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_4' , tileIndex );
+				  break;
+				case 'l5':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_5' , tileIndex );
+				  break;
+				case 'l6':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_6' , tileIndex );
+				  break;
+				case 'l7':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_7' , tileIndex );
+				  break;
+				case 'l8':
+				  spriteInfo = Tileset.getSpriteInfo( 'lake_8' , tileIndex );
 				  break;
 			  }
 			  //chunk = spriteInfo.canvas.getContext( '2d' ).getImageData( spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x , spriteInfo.tiledims.y );
@@ -222,8 +259,6 @@ console.log(a,b,c);
 				  ox = pc.x * tx ,
 				  oy = pc.y * ty;
 			  drawTile( ox , oy , ox + tx , oy + ty , 'P' );
-			  // set current position for redraw
-			  Renderer.queueForUpdate( Stage.getIndexFor( pc ) );
 			},
 			render = function(){
 			  map = Stage.getMap();
@@ -280,8 +315,8 @@ console.log(a,b,c);
 			  });
 			},
 			getEntrance = function(){
-			  // find entrance (E) in mapdata and return correspoding co-ords
-			  return getCoordsFor( _.indexOf( map.mapdata , 'E' ) );
+			  // find entrance (fe) in mapdata and return correspoding co-ords
+			  return getCoordsFor( _.indexOf( map.mapdata , 'fe' ) );
 			},
 			getTileAt = function( coords ){
 			  if( coords.x < 0 || coords.x >= map.mapdims.x || coords.y < 0 || coords.y >= map.mapdims.y ){
@@ -334,7 +369,7 @@ console.log(a,b,c);
 			  var newCoords = { x: pos.x + vect[0] , y: pos.y + vect[1] };
 			  // check position valid
 			  var tile = Stage.getTileAt( newCoords );
-			  if( tile !== "0" ){
+			  if( tile === "f0" ){
 				pos = newCoords;
 			  }
 			  switch( vect[0] ){
@@ -420,7 +455,7 @@ console.log(a,b,c);
 
 	  Game = (function(){
 
-		var frametime = 40,
+		var frametime = 80,
 			start = function(){
 			  // load Tileset images
 			  Tileset.load( function(){
