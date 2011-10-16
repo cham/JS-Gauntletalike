@@ -1,5 +1,15 @@
 /**
  * Game
+ *
+ * dependency tree:
+ *   MapProvider
+ *   Tileset
+ *     Stage
+ *       Player
+ *         Renderer
+ *         Controller
+ *
+ *
  * @author Dan Neame <@cham>
  */
 (function(window){
@@ -154,6 +164,7 @@ console.log(a,b,c);
 		var map ,
 			ctx ,
 			pixeldims ,
+			updateList = [] ,
 			clear = function(){
 			  ctx.clearRect( 0 , 0 , ( map.mapdims.x * pixeldims.x ) , ( map.mapdims.y * pixeldims.y ) );
 			},
@@ -193,12 +204,12 @@ console.log(a,b,c);
 			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox , oy , dx - ox , dy - oy );
 			},
 			drawBackground = function(){
-			  _.each( map.mapdata , function( tile , i ){
+			  _.each( updateList , function( i ){
 				var tilecoords = Stage.getCoordsFor( i ) ,
 				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox = tilecoords.x * tx ,
 				  oy = tilecoords.y * ty;
-				drawTile( ox , oy , ox + tx , oy + ty , tile , i );
+				drawTile( ox , oy , ox + tx , oy + ty , map.mapdata[ i ] , i );
 			  });
 			},
 			drawPlayer = function(){
@@ -212,16 +223,18 @@ console.log(a,b,c);
 			  map = Stage.getMap();
 			  ctx = Stage.getContext();
 			  pixeldims = Tileset.getPixelDims();
-			  // clear
-			  clear();
+			  //updateList = _.keys( map.mapdata ); // set updatelist to be every tile
 			  // draw background
 			  drawBackground();
 			  // draw player
 			  drawPlayer();
+			  updateList = []; // empty updatelist for next render
 			};
 
 		return {
-		  render: render
+		  render: render,
+		  queueForUpdate: function( index ){ updateList.push( index ); },
+		  setUpdateList: function( ul ){ updateList = ul; }
 		}
 
 	  })(),
@@ -269,9 +282,7 @@ console.log(a,b,c);
 				return '0';
 			  }
 			  // translate coords into index
-			  var ind = coords.y * map.mapdims.x;
-			  ind += coords.x;
-			  return map.mapdata[ ind ];
+			  return map.mapdata[ getIndexFor( coords ) ];
 			},
 			getCoordsFor = function( ind ){
 			  var row = Math.floor( ind / map.mapdims.x ) ,
@@ -280,6 +291,10 @@ console.log(a,b,c);
 				x: col ,
 				y: row
 			  };
+			},
+			getIndexFor = function( coords ){
+			  var ind = coords.y * map.mapdims.x;
+			  return ( ind + coords.x );
 			};
 
 		return {
@@ -287,6 +302,7 @@ console.log(a,b,c);
 		  getEntrance: getEntrance,
 		  getTileAt:getTileAt,
 		  getCoordsFor:getCoordsFor,
+		  getIndexFor:getIndexFor,
 		  getMap:function(){return map;},
 		  getContext:function(){return ctx;},
 		  getCanvas:function(){return $_canvas;}
@@ -349,6 +365,8 @@ console.log(a,b,c);
 		var listen = function(){
 		  jQuery( document ).keydown( function(e){
 			var which = String.fromCharCode( e.which ).toLowerCase();
+			// set current position for redraw
+			Renderer.queueForUpdate( Stage.getIndexFor( Player.getPosition() ) );
 			switch( which ){
 			  case 'w':
 				Player.setMovement(1,-1);
@@ -402,6 +420,8 @@ console.log(a,b,c);
 				Stage.load( 2 , function(){
 				  // move player to entrance
 				  Player.moveToEntrance();
+				  // set render list to be whole map
+				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile
 				  // move player and render frame every frametime ms
 				  window.setTimeout( function tick(){
 					Player.move();

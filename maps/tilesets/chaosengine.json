@@ -1,7 +1,7 @@
 {
     "mappath" : "assets/w4.png" ,
     "characterpath" : "assets/players.png" ,
-    "tilepixeldims" : { "x": 32 , "y": 32 },
+    "tilepixeldims" : { "x": 36 , "y": 36 },
     "floors" : [
       { "x": 188 , "y": 86 },
       { "x": 188 , "y": 103 },
