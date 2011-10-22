@@ -58,7 +58,7 @@
 			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
 			charactersprite = document.createElement( 'canvas' ) ,
-			floors , walls , altWall ,
+			tilepositions ,
 			playerstates = {},
 			/**
 			 * load
@@ -79,9 +79,7 @@
 				  mappath = data.mappath;
 				  characterpath = data.characterpath;
 				  pixel_dims = data.tilepixeldims;
-				  floors = data.floors;
-				  walls = data.walls;
-				  altWall = data.alt_wall_1;
+				  tilepositions = data.tilepositions;
 				  playerstates = data.playerstates;
 				  // load images, onload create canvas elements and execute cb when both done
 				  mapimg.onload = function(){
@@ -114,55 +112,13 @@ console.log(a,b,c);
 			 * @param {Number} salt
 			 */
 			getSpriteInfo = function( tiletype , salt ){
-			  var playerfacing = Player.getDirectionFacing();
-			  switch( tiletype ){
-				case 'floor_0':
-				  return { canvas: mapsprite , x: floors[ 0 ].x , y: floors[ 0 ].y , tiledims: pixel_dims };
-				  break;
-				case 'wall_0':
-				  return { canvas: mapsprite , x: walls[ 0 ].x , y: walls[ 0 ].y , tiledims: pixel_dims };
-				  break;
-				case 'wall_1':
-				  return { canvas: mapsprite , x: walls[ 1 ].x , y: walls[ 1 ].y , tiledims: pixel_dims };
-				  break;
-				case 'wall_2':
-				  return { canvas: mapsprite , x: walls[ 2 ].x , y: walls[ 2 ].y , tiledims: pixel_dims };
-				  break;
-				case 'wall_3':
-				  return { canvas: mapsprite , x: walls[ 3 ].x , y: walls[ 3 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_0':
-				  return { canvas: mapsprite , x: altWall[ 0 ].x , y: altWall[ 0 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_1':
-				  return { canvas: mapsprite , x: altWall[ 1 ].x , y: altWall[ 1 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_2':
-				  return { canvas: mapsprite , x: altWall[ 2 ].x , y: altWall[ 2 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_3':
-				  return { canvas: mapsprite , x: altWall[ 3 ].x , y: altWall[ 3 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_4':
-				  return { canvas: mapsprite , x: altWall[ 4 ].x , y: altWall[ 4 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_5':
-				  return { canvas: mapsprite , x: altWall[ 5 ].x , y: altWall[ 5 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_6':
-				  return { canvas: mapsprite , x: altWall[ 6 ].x , y: altWall[ 6 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_7':
-				  return { canvas: mapsprite , x: altWall[ 7 ].x , y: altWall[ 7 ].y , tiledims: pixel_dims };
-				  break;
-				case 'lake_8':
-				  return { canvas: mapsprite , x: altWall[ 8 ].x , y: altWall[ 8 ].y , tiledims: pixel_dims };
-				  break;
-				case 'player':
-				  return { canvas: charactersprite , x: playerstates[playerfacing].x  , y: playerstates[playerfacing].y , tiledims: pixel_dims };
-				  break;
+			  // if player return player sheet else return tilesheet
+			  if( tiletype === 'player' ){
+				var playerfacing = Player.getDirectionFacing();
+				return { canvas: charactersprite , x: playerstates[ playerfacing ].x  , y: playerstates[ playerfacing ].y , tiledims: pixel_dims };
+			  }else{
+				return { canvas: mapsprite , x: tilepositions[ tiletype ].x , y: tilepositions[ tiletype ].y , tiledims: pixel_dims };
 			  }
-			  return { canvas: mapsprite , x: 290 , y: 290 , tiledims: pixel_dims };
 			};
 
 		return {
@@ -189,60 +145,16 @@ console.log(a,b,c);
 			  ctx.clearRect( 0 , 0 , ( map.mapdims.x * pixeldims.x ) , ( map.mapdims.y * pixeldims.y ) );
 			},
 			drawTile = function( ox , oy , dx , dy , tileType , tileIndex ){
-			  var spriteInfo , chunk;
-			  switch( tileType ){
-				case 'P':
-				  spriteInfo = Tileset.getSpriteInfo( 'player' );
-				  break;
-				case 'f0':
-				  spriteInfo = Tileset.getSpriteInfo( 'floor_0' , tileIndex );
-				  break;
-				case 'fe':
-				  spriteInfo = Tileset.getSpriteInfo( 'floor_0' , tileIndex );
-				  break;
-				case 'w0':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall_0' , tileIndex );
-				  break;
-				case 'w1':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall_1' , tileIndex );
-				  break;
-				case 'w2':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall_2' , tileIndex );
-				  break;
-				case 'w3':
-				  spriteInfo = Tileset.getSpriteInfo( 'wall_3' , tileIndex );
-				  break;
-				case 'l0':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_0' , tileIndex );
-				  break;
-				case 'l1':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_1' , tileIndex );
-				  break;
-				case 'l2':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_2' , tileIndex );
-				  break;
-				case 'l3':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_3' , tileIndex );
-				  break;
-				case 'l4':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_4' , tileIndex );
-				  break;
-				case 'l5':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_5' , tileIndex );
-				  break;
-				case 'l6':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_6' , tileIndex );
-				  break;
-				case 'l7':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_7' , tileIndex );
-				  break;
-				case 'l8':
-				  spriteInfo = Tileset.getSpriteInfo( 'lake_8' , tileIndex );
-				  break;
+			  var spriteInfo , chunk , offset = {x:0,y:0};
+			  if( tileType === 'P' ){
+				spriteInfo = Tileset.getSpriteInfo( 'player' );
+				offset = Player.getOffset();
+			  }else{
+				spriteInfo = Tileset.getSpriteInfo( tileType , tileIndex );
 			  }
 			  //chunk = spriteInfo.canvas.getContext( '2d' ).getImageData( spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x , spriteInfo.tiledims.y );
 			  //ctx.putImageData( chunk , ox , oy );
-			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox , oy , dx - ox , dy - oy );
+			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x, spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox  + offset.x , oy  + offset.y , dx - ox , dy - oy );
 			},
 			drawBackground = function(){
 			  _.each( _.uniq( updateList ) , function( i ){
@@ -254,7 +166,7 @@ console.log(a,b,c);
 			  });
 			},
 			drawPlayer = function(){
-			  var pc = Player.getPosition() ,
+			  var pc = Player.getTile() ,
 				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox = pc.x * tx ,
 				  oy = pc.y * ty;
@@ -353,26 +265,69 @@ console.log(a,b,c);
 
 	  Player = (function(){
 
-		var pos = {x:0,y:0} ,
+		var intile = {x:0,y:0} ,
 			moveToEntrance = function(){
-			  pos = Stage.getEntrance();
+			  intile = Stage.getEntrance();
 			},
 			moving = [0,0],
 			facing = 'down',
+			pixel_offset = {x:0,y:0},
+			movementSpeed = 10,
+			getNewOffset = function(){
+			  var newX = pixel_offset.x + ( moving[0] * movementSpeed ) ,
+				  newY = pixel_offset.y + ( moving[1] * movementSpeed ) ,
+				  tileX = 0, tileY = 0;
+			  // check for tile movement in x
+			  if( newX > 24 ){ newX -= 24; tileX = 1; }
+			  if( newX < 0 ){  newX += 24; tileX = -1; }
+			  if( newY > 24 ){ newY -= 24; tileY = 1; }
+			  if( newY < 0 ){  newY += 24; tileY = -1; }
+			  return {
+				x: newX ,
+				y: newY ,
+				tileX: tileX,
+				tileY: tileY
+			  };
+			},
+			getTilesToRedraw = function(){
+			  // tiles to redraw are the current position and all surrounding tiles
+			  var toRedraw = [ intile ] , cx = intile.x , cy = intile.y , pox = pixel_offset.x, poy = pixel_offset.y;
+
+			  // if offset greater than 0 in x
+			  if( pox > 0 ){
+				// tile to the right
+				toRedraw.push( {
+				  x: cx + 1,
+				  y: cy
+				} );
+				// if offset greater than 0 in y
+				if( poy > 0 ){
+				  // tile to botom right
+				  toRedraw.push( {
+					x: cx + 1,
+					y: cy + 1
+				  } );
+				}
+			  }
+			  // if offset greater than 0 in y
+			  if( poy > 0 ){
+				// tile to botom right
+				toRedraw.push( {
+				  x: cx ,
+				  y: cy + 1
+				} );
+			  }
+			  // if offset less than 0 in x
+			  return toRedraw;
+			},
 			move = function(){
-			  var vect = moving;
-			  // push current position to redraw list
-			  if( vect[ 0 ] !== 0 || vect[ 1 ] !== 0 ){
-				Renderer.queueForUpdate( Stage.getIndexFor( pos ) );
-			  }
-			  // move in the vector sent
-			  var newCoords = { x: pos.x + vect[0] , y: pos.y + vect[1] };
-			  // check position valid
-			  var tile = Stage.getTileAt( newCoords );
-			  if( tile === "f0" ){
-				pos = newCoords;
-			  }
-			  switch( vect[0] ){
+			  // get new offset and set new tile position if moving tile
+			  var newOffset = getNewOffset() ,
+				  newTilePos = { x: intile.x + newOffset.tileX , y: intile.y + newOffset.tileY } ,
+				  tile = Stage.getTileAt( newTilePos ) ,
+				  tilesToUpdate = [];
+			  // set facing
+			  switch( moving[0] ){
 				case -1:
 				  facing = 'left';
 				  break;
@@ -380,7 +335,7 @@ console.log(a,b,c);
 				  facing = 'right';
 				  break;
 			  }
-			  switch( vect[1] ){
+			  switch( moving[1] ){
 				case -1:
 				  facing = 'up';
 				  break;
@@ -388,6 +343,16 @@ console.log(a,b,c);
 				  facing = 'down';
 				  break;
 			  }
+			  // set new offset and tile position
+			  if( tile.substr(0,1) === "f" ){
+				pixel_offset.x = newOffset.x;
+				pixel_offset.y = newOffset.y;
+				intile = newTilePos;
+			  }
+			  tilesToUpdate = getTilesToRedraw();
+			  _( tilesToUpdate ).each( function( tileCoords ){
+				Renderer.queueForUpdate( Stage.getIndexFor( tileCoords ) );
+			  });
 			},
 			setMovement = function( index , val ){
 			  moving[ index ] = val;
@@ -398,7 +363,8 @@ console.log(a,b,c);
 		  moveToEntrance: moveToEntrance,
 		  move:move,
 		  setMovement:setMovement,
-		  getPosition:function(){return pos;},
+		  getTile:function(){return intile;},
+		  getOffset:function(){return pixel_offset;},
 		  getDirectionFacing:function(){return facing;}
 
 		};
@@ -464,7 +430,7 @@ console.log(a,b,c);
 				  // move player to entrance
 				  Player.moveToEntrance();
 				  // set render list to be whole map
-				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile
+				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
 				  // move player and render frame every frametime ms
 				  window.setTimeout(
 					function tick(){
