@@ -129,6 +129,95 @@ console.log(a,b,c);
 
 	  })(),
 
+	  Monster = (function(){
+
+		var coords = {x:0,y:0},
+			moving = [0,0],
+			facing = 'down',
+			setPosition = function(newCoords){
+			  coords = newCoords;
+			},
+			/**
+			 * move
+			 * sets moving array to move in the direction of the player
+			 */
+			move = function(){
+			  // calculate movement vector
+			  var playerPos = Player.getTile() ,
+				  xdiff = coords.x - playerPos.x ,
+				  ydiff = coords.y - playerPos.y;
+			  moving = [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ];
+			  // set facing
+			  switch( moving[0] ){
+				case -1:
+				  facing = 'left';
+				  break;
+				case 1:
+				  facing = 'right';
+				  break;
+			  }
+			  switch( moving[1] ){
+				case -1:
+				  facing = 'up';
+				  break;
+				case 1:
+				  facing = 'down';
+				  break;
+			  }
+			  coords.x += moving[ 0 ];
+			  coords.y += moving[ 1 ];
+			  if( playerPos.x === coords.x && playerPos.y === coords.y ){
+				
+			  }
+			};
+
+		return {
+		  'move': move,
+		  'setPosition': setPosition,
+		  'clone' : function(){
+			function F() {}
+			F.prototype = this;
+			return new F();
+		  }
+		};
+
+	  })();
+
+	  /**
+	   * MonsterSpawner
+	   * clones and sets up new Monster objects
+	   */
+	  MonsterSpawner = (function(){
+
+		var monsters = [], // array of monster objects the spawner has spawned
+			coords = {x:8,y:8}, // coordinates to spawn new monsters at
+			/**
+			 * spawnNewMonster
+			 * creates a new monster object and runs initialisation methods on it
+			 */
+			spawnNewMonster = function(){
+			  var monster = Monster.clone();
+			  monster.setPosition( coords );
+			  monsters.push( monster );
+console.log( monster );
+			},
+			/**
+			 * moveMonsters
+			 * moves all monsters in local array
+			 */
+			moveMonsters = function(){
+			  _( monsters ).each( function( monster ){
+				monster.move();
+			  });
+			};
+
+		return {
+		  'spawnNewMonster':spawnNewMonster,
+		  'moveMonsters':moveMonsters
+		};
+
+	  })(),
+
 	  /**
 	   * Renderer
 	   * renders the playing area
@@ -336,14 +425,13 @@ console.log(a,b,c);
 				  facing = 'down';
 				  break;
 			  }
-			  // always redraw current tile
-			  //Renderer.queueForUpdate( Stage.getIndexFor( intile ) );
-			  // set new offset and tile position
+			  // set new offset and tile position if moving into a floor tile
 			  if( tile.substr(0,1) === "f" ){
 				pixel_offset.x = newOffset.x;
 				pixel_offset.y = newOffset.y;
 				intile = newTilePos;
 			  }
+			  // get indexes of tiles to redraw
 			  tilesToUpdate = getTilesToRedraw();
 			  _( tilesToUpdate ).each( function( tileIndex ){
 				Renderer.queueForUpdate( tileIndex );
@@ -384,6 +472,9 @@ console.log(a,b,c);
 			  case 'd':
 				Player.setMovement(0,1);
 				break;
+			  case 'm':
+				MonsterSpawner.spawnNewMonster();
+				break;
 			  default:
 				break;
 			}
@@ -391,15 +482,13 @@ console.log(a,b,c);
 			var which = String.fromCharCode( e.which ).toLowerCase();
 			switch( which ){
 			  case 'w':
+			  case 's':
+				Player.setMovement(1,0);
 				Player.setMovement(1,0);
 				break;
 			  case 'a':
-				Player.setMovement(0,0);
-				break;
-			  case 's':
-				Player.setMovement(1,0);
-				break;
 			  case 'd':
+				Player.setMovement(0,0);
 				Player.setMovement(0,0);
 				break;
 			  default:
@@ -416,7 +505,15 @@ console.log(a,b,c);
 
 	  Game = (function(){
 
-		var frametime = 40,
+		var	frametime = 40,
+			tick = function(){
+			  Player.move();
+			  Renderer.render();
+			  MonsterSpawner.moveMonsters();
+			  if( 1 ){
+				window.setTimeout( tick , frametime );
+			  }
+			}
 			start = function(){
 			  // load Tileset images
 			  Tileset.load( function(){
@@ -426,14 +523,9 @@ console.log(a,b,c);
 				  Player.moveToEntrance();
 				  // set render list to be whole map
 				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
-				  // move player and render frame every frametime ms
-				  window.setTimeout(
-					function tick(){
-					  Player.move();
-					  Renderer.render();
-					  window.setTimeout( tick , frametime );
-					}
-				  , frametime );
+				  MonsterSpawner.spawnNewMonster();
+				  // start tick
+				  tick();
 				  // listen for keyboard input
 				  Controller.listen();
 				});
