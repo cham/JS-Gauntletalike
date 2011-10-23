@@ -58,8 +58,7 @@
 			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
 			charactersprite = document.createElement( 'canvas' ) ,
-			tilepositions ,
-			playerstates = {},
+			tilepositions = {} , playerstates = {}, monsterstates = {},
 			/**
 			 * load
 			 * load and parse the tileset description, then load the associated sprites, then run the given callback
@@ -81,6 +80,7 @@
 				  pixel_dims = data.tilepixeldims;
 				  tilepositions = data.tilepositions;
 				  playerstates = data.playerstates;
+				  monsterstates = data.monsterstates;
 				  // load images, onload create canvas elements and execute cb when both done
 				  mapimg.onload = function(){
 					var ctx = mapsprite.getContext( '2d' );
@@ -111,11 +111,13 @@ console.log(a,b,c);
 			 * @param {String} tiletype
 			 * @param {Number} salt
 			 */
-			getSpriteInfo = function( tiletype , salt ){
+			getSpriteInfo = function( tiletype , salt , f ){
+			  var facing = f || '';
 			  // if player return player sheet else return tilesheet
-			  if( tiletype === 'P' ){
-				var playerfacing = Player.getDirectionFacing();
-				return { canvas: charactersprite , x: playerstates[ playerfacing ][ salt ].x  , y: playerstates[ playerfacing ][ salt ].y , tiledims: pixel_dims };
+			  if( tiletype === 'player' ){
+				return { canvas: charactersprite , x: playerstates[  facing ][ salt ].x  , y: playerstates[  facing ][ salt ].y , tiledims: pixel_dims };
+			  }else if( tiletype === 'monster' ){
+				return { canvas: charactersprite , x: monsterstates[ facing ][ salt ].x  , y: monsterstates[ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else{
 				return { canvas: mapsprite , x: tilepositions[ tiletype ].x , y: tilepositions[ tiletype ].y , tiledims: pixel_dims };
 			  }
@@ -136,6 +138,12 @@ console.log(a,b,c);
 			facing = 'down',
 			setPosition = function(newCoords){
 			  coords = newCoords;
+			},
+			getPosition = function(){
+			  return coords;
+			},
+			getFacing = function(){
+			  return facing;
 			},
 			/**
 			 * move
@@ -167,13 +175,15 @@ console.log(a,b,c);
 			  coords.x += moving[ 0 ];
 			  coords.y += moving[ 1 ];
 			  if( playerPos.x === coords.x && playerPos.y === coords.y ){
-				
+
 			  }
 			};
 
 		return {
 		  'move': move,
 		  'setPosition': setPosition,
+		  'getPosition': getPosition,
+		  'getFacing': getFacing,
 		  'clone' : function(){
 			function F() {}
 			F.prototype = this;
@@ -209,10 +219,21 @@ console.log( monster );
 			  _( monsters ).each( function( monster ){
 				monster.move();
 			  });
+			},
+			getMonsterStates = function(){
+			  var states = [];
+			  _( monsters ).each( function( monster ){
+				states.push( {
+				  'facing' : monster.getFacing(),
+				  'coords' : monster.getPosition()
+				} );
+			  });
+			  return states;
 			};
 
 		return {
 		  'spawnNewMonster':spawnNewMonster,
+		  'getMonsterStates':getMonsterStates,
 		  'moveMonsters':moveMonsters
 		};
 
@@ -230,19 +251,24 @@ console.log( monster );
 			ctx ,
 			pixeldims ,
 			updateList = [] ,
-			playerSwitch = 7,
+			playerSwitch = 7 ,
+			lastMonsterNum = 0 ,
 			clear = function(){
 			  ctx.clearRect( 0 , 0 , ( map.mapdims.x * pixeldims.x ) , ( map.mapdims.y * pixeldims.y ) );
 			},
-			drawTile = function( ox , oy , dx , dy , tileType , tileIndex ){
+			drawTile = function( ox , oy , dx , dy , tileType , tileIndex , facing ){
 			  var spriteInfo , chunk , offset = {x:0,y:0};
-			  if( tileType === 'P' ){
+			  if( tileType === 'player' ){
 				offset = Player.getOffset();
 			  }
-			  spriteInfo = Tileset.getSpriteInfo( tileType , tileIndex );
+			  spriteInfo = Tileset.getSpriteInfo( tileType , tileIndex , facing );
 			  //chunk = spriteInfo.canvas.getContext( '2d' ).getImageData( spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x , spriteInfo.tiledims.y );
 			  //ctx.putImageData( chunk , ox , oy );
-			  ctx.drawImage( spriteInfo.canvas, spriteInfo.x, spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox  + offset.x , oy  + offset.y , dx - ox , dy - oy );
+			  try {
+				ctx.drawImage( spriteInfo.canvas, spriteInfo.x, spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox  + offset.x , oy  + offset.y , dx - ox , dy - oy );
+			  }catch( e ){
+				console.log( e , spriteInfo );
+			  }
 			},
 			drawBackground = function(){
 			  _.each( _.uniq( updateList ) , function( i ){
@@ -262,7 +288,21 @@ console.log( monster );
 			  if( playerSwitch < 0 ){
 				playerSwitch = 7;
 			  }
-			  drawTile( ox , oy , ox + tx , oy + ty , 'P' , +( playerSwitch > 3 ) );
+			  drawTile( ox , oy , ox + tx , oy + ty , 'player' , +( playerSwitch > 3 ) , Player.getFacing() );
+			},
+			drawMonsters = function(){
+			  var monsterStates = MonsterSpawner.getMonsterStates() ,
+				  tx = pixeldims.x , ty = pixeldims.y ,
+				  ox,oy;
+			  if( _( monsterStates ).size() !== lastMonsterNum ){
+				lastMonsterNum = _( monsterStates ).size();
+				console.log( monsterStates );
+			  }
+			  _( monsterStates ).each( function( mState ){
+				ox = mState.coords.x * tx ,
+				oy = mState.coords.y * ty;
+				drawTile( ox , oy , ox + tx , oy + ty , 'monster' , +( playerSwitch > 3 ) , mState.facing );
+			  } );
 			},
 			render = function(){
 			  map = Stage.getMap();
@@ -273,6 +313,8 @@ console.log( monster );
 			  drawBackground();
 			  // draw player
 			  drawPlayer();
+			  // draw monsters
+			  drawMonsters();
 			  updateList = []; // empty updatelist for next render
 			};
 
@@ -448,7 +490,7 @@ console.log( monster );
 		  setMovement:setMovement,
 		  getTile:function(){return intile;},
 		  getOffset:function(){return pixel_offset;},
-		  getDirectionFacing:function(){return facing;}
+		  getFacing:function(){return facing;}
 
 		};
 
@@ -508,8 +550,8 @@ console.log( monster );
 		var	frametime = 40,
 			tick = function(){
 			  Player.move();
-			  Renderer.render();
 			  MonsterSpawner.moveMonsters();
+			  Renderer.render();
 			  if( 1 ){
 				window.setTimeout( tick , frametime );
 			  }
@@ -523,7 +565,6 @@ console.log( monster );
 				  Player.moveToEntrance();
 				  // set render list to be whole map
 				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
-				  MonsterSpawner.spawnNewMonster();
 				  // start tick
 				  tick();
 				  // listen for keyboard input
