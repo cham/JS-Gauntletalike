@@ -131,125 +131,156 @@ console.log(a,b,c);
 
 	  })(),
 
-	  Monster = (function(){
-
-		var coords = {x:0,y:0},
-			offset = {x:0,y:0},
-			moving = [0,0],
-			facing = 'down',
-			movementSpeed = 3,
-			getNewOffset = function(){
-			  var newX = offset.x + ( moving[0] * movementSpeed ) ,
-				  newY = offset.y + ( moving[1] * movementSpeed ) ,
-				  tileX = 0, tileY = 0;
-			  // check for tile movement in x
-			  if( newX > 12  ){ newX -= 24; tileX = 1; }
-			  if( newX < -12 ){  newX += 24; tileX = -1; }
-			  if( newY > 4  ){ newY -= 24; tileY = 1; }
-			  if( newY < -20 ){  newY += 24; tileY = -1; }
-			  return {
-				x: newX ,
-				y: newY ,
-				tileX: tileX,
-				tileY: tileY
-			  };
-			},
-			setPosition = function(newCoords){
-			  coords = newCoords;
-			},
-			getPosition = function(){
-			  return coords;
-			},
-			getFacing = function(){
-			  return facing;
-			},
-			getOffset = function(){
-			  return offset;
-			},
-			getTilesToRedraw = function(){
-			  // tiles to redraw are the current position and all surrounding tiles
-			  var currentIndex = Stage.getIndexFor( coords ) ,
-				  map = Stage.getMap() ,
-				  maxIndex = map.mapdata.length ,
-				  mapDims = map.mapdims , mw = mapDims.x , mh = mapDims.y ,
-				  candidatePoints = [
-					currentIndex - ( mw - 1 ) ,
-					currentIndex - mw ,
-					currentIndex - ( mw + 1 ) ,
-					currentIndex - 1 ,
-					currentIndex ,
-					currentIndex + 1 ,
-					currentIndex + ( mw - 1 ) ,
-					currentIndex + mw ,
-					currentIndex + ( mw + 1 )
-				  ];
-			  return _.select( candidatePoints , function( index ){
-				return index > -1 && index < maxIndex;
-			  } );
-			},
-			/**
-			 * move
-			 * sets moving array to move in the direction of the player
-			 */
-			move = function(){
-			  // calculate movement vector
-			  var playerPos = Player.getTile() ,
-				  xdiff = coords.x - playerPos.x ,
-				  ydiff = coords.y - playerPos.y ,
-				  newOffset,newTilePos,tilesToUpdate=[],
-				  tile;
-			  moving = [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ];
-			  // calculate new offset / tile
-			  newOffset = getNewOffset();
-			  newTilePos = { x: coords.x + newOffset.tileX , y: coords.y + newOffset.tileY };
+	  Monster = {
+		coords: {x:0,y:0},
+		offset: {x:0,y:0},
+		moving: [0,0],
+		facing: 'down',
+		movementSpeed: 3,
+		getNewOffsetForMovement: function( moveVect ){
+		  var newX = this.offset.x + ( moveVect[0] * this.movementSpeed ) ,
+			  newY = this.offset.y + ( moveVect[1] * this.movementSpeed ) ,
+			  tileX = 0, tileY = 0;
+		  // check for tile movement in x
+		  if( newX > 12  ){ newX -= 24; tileX = 1; }
+		  if( newX < -12 ){  newX += 24; tileX = -1; }
+		  if( newY > 4  ){ newY -= 24; tileY = 1; }
+		  if( newY < -20 ){  newY += 24; tileY = -1; }
+		  return {
+			x: newX ,
+			y: newY ,
+			tileX: tileX,
+			tileY: tileY
+		  };
+		},
+		setPosition: function(newCoords){
+		  this.coords = newCoords;
+		},
+		getPosition: function(){
+		  return this.coords;
+		},
+		getFacing: function(){
+		  return this.facing;
+		},
+		getOffset: function(){
+		  return this.offset;
+		},
+		getTilesToRedraw: function(){
+		  // tiles to redraw are the current position and all surrounding tiles
+		  var currentIndex = Stage.getIndexFor( this.coords ) ,
+			  map = Stage.getMap() ,
+			  maxIndex = map.mapdata.length ,
+			  mapDims = map.mapdims , mw = mapDims.x , mh = mapDims.y ,
+			  candidatePoints = [
+				currentIndex - ( mw - 1 ) ,
+				currentIndex - mw ,
+				currentIndex - ( mw + 1 ) ,
+				currentIndex - 1 ,
+				currentIndex ,
+				currentIndex + 1 ,
+				currentIndex + ( mw - 1 ) ,
+				currentIndex + mw ,
+				currentIndex + ( mw + 1 )
+			  ];
+		  return _.select( candidatePoints , function( index ){
+			return index > -1 && index < maxIndex;
+		  } );
+		},
+		/**
+		 * decideMovement
+		 * sets the movement for the monster depending on the player location and the closest floor tile in that direction
+		 */
+		decideMovement: function(){
+		  var playerPos = Player.getTile() ,
+			  xdiff = this.coords.x - playerPos.x ,
+			  ydiff = this.coords.y - playerPos.y ,
+			  vectorToPlayer = [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ] ,
+			  vectX = [ vectorToPlayer[ 0 ] , 0 ], vectY = [ 0 , vectorToPlayer[ 1 ] ],
+			  newOffset = this.getNewOffsetForMovement( vectorToPlayer ) ,
+			  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY },
 			  tile = Stage.getTileAt( newTilePos );
-			  if( tile.substr(0,1) === "f" ){
-				offset.x = newOffset.x;
-				offset.y = newOffset.y;
-				coords = newTilePos;
+		  // if tile in vectorToPlayer direction is a floor tile, set it and return
+		  if( tile.substr(0,1) === 'f' ){
+			this.moving = vectorToPlayer;
+		  }else{
+			// else if tile in x is ok
+			newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y };
+			tile = Stage.getTileAt( newTilePos );
+			if( tile.substr(0,1) === 'f' ){
+			  this.moving = vectX;
+			}else{
+			  // else if tile in y is ok
+			  newTilePos = { x: this.coords.x , y: this.coords.y + newOffset.tileY };
+			  tile = Stage.getTileAt( newTilePos );
+			  if( tile.substr(0,1) === 'f' ){
+				this.moving = vectY;
+			  }else{
+				this.moving = [ 0 , 0 ];
 			  }
-			  // set facing
-			  switch( moving[0] ){
-				case -1:
-				  facing = 'left';
-				  break;
-				case 1:
-				  facing = 'right';
-				  break;
-			  }
-			  switch( moving[1] ){
-				case -1:
-				  facing = 'up';
-				  break;
-				case 1:
-				  facing = 'down';
-				  break;
-			  }
-			  if( playerPos.x === coords.x && playerPos.y === coords.y ){
-				Game.stop();
-				alert( 'You were eaten by a grue' );
-			  }
-			  // get indexes of tiles to redraw
-			  tilesToUpdate = getTilesToRedraw();
-			  _( tilesToUpdate ).each( function( tileIndex ){
-				Renderer.queueForUpdate( tileIndex );
-			  });
-			};
-
-		return {
-		  'move': move,
-		  'setPosition': setPosition,
-		  'getPosition': getPosition,
-		  'getOffset': getOffset,
-		  'getFacing': getFacing,
-		  'clone' : function(){
-			function F() {}
-			F.prototype = this;
-			return new F();
+			}
 		  }
-		};
 
-	  })();
+		  // else no movement
+
+		},
+		/**
+		 * move
+		 * sets moving array to move in the direction of the player
+		 */
+		move: function(){
+		  // calculate movement vector
+		  var playerPos = Player.getTile() ,/*
+			  xdiff = this.coords.x - playerPos.x ,
+			  ydiff = this.coords.y - playerPos.y ,*/
+			  newOffset,newTilePos,tilesToUpdate=[],
+			  tile;
+		  this.decideMovement();
+		  //this.moving = [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ];
+		  // calculate new offset / tile
+		  newOffset = this.getNewOffsetForMovement( this.moving );
+		  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY };
+		  tile = Stage.getTileAt( newTilePos );
+		  if( tile.substr(0,1) === "f" && MonsterSpawner.isTileFree( newTilePos , this ) ){
+			this.offset.x = newOffset.x;
+			this.offset.y = newOffset.y;
+			this.coords = newTilePos;
+		  }
+		  // set facing
+		  switch( this.moving[0] ){
+			case -1:
+			  this.facing = 'left';
+			  break;
+			case 1:
+			  this.facing = 'right';
+			  break;
+		  }
+		  switch( this.moving[1] ){
+			case -1:
+			  this.facing = 'up';
+			  break;
+			case 1:
+			  this.facing = 'down';
+			  break;
+		  }
+		  if( playerPos.x === this.coords.x && playerPos.y === this.coords.y ){
+			Game.stop();
+			alert( 'You were eaten by a grue' );
+		  }
+		  // get indexes of tiles to redraw
+		  tilesToUpdate = this.getTilesToRedraw();
+		  _( tilesToUpdate ).each( function( tileIndex ){
+			Renderer.queueForUpdate( tileIndex );
+		  });
+		},
+		clone: function(){
+		  function F() {}
+		  F.prototype = this;
+		  return new F();
+		},
+		setOffset: function( off ){
+		  this.offset = off;
+		}
+	  },
 
 	  /**
 	   * MonsterSpawner
@@ -258,6 +289,8 @@ console.log(a,b,c);
 	  MonsterSpawner = (function(){
 
 		var monsters = [], // array of monster objects the spawner has spawned
+			autoSpawn = false,
+			spawntime = 5 * 1000,
 			coords = {x:17,y:7}, // coordinates to spawn new monsters at
 			/**
 			 * spawnNewMonster
@@ -266,14 +299,18 @@ console.log(a,b,c);
 			spawnNewMonster = function(){
 			  var monster = Monster.clone();
 			  monster.setPosition( coords );
+			  monster.setOffset( { x:0 , y:0 } );
 			  monsters.push( monster );
+			  if( autoSpawn ){
+				window.setTimeout( spawnNewMonster , spawntime );
+			  }
 			},
 			/**
 			 * moveMonsters
 			 * moves all monsters in local array
 			 */
 			moveMonsters = function(){
-			  _( monsters ).each( function( monster ){
+			  _( monsters ).each( function( monster , i ){
 				monster.move();
 			  });
 			},
@@ -287,12 +324,26 @@ console.log(a,b,c);
 				} );
 			  });
 			  return states;
+			},
+			// TODO this probably needs to go in the monster spawner collection when that exists
+			isTileFree = function( checkCoords , ignoreMonster ){
+			  var mPos;
+			  return _( monsters ).select( function( monster ){
+				mPos = monster.getPosition();
+				return ( mPos.x === checkCoords.x && mPos.y === checkCoords.y && monster !== ignoreMonster );
+			  } ).length < 1;
+			},
+			startSpawn = function(){
+			  autoSpawn = true;
+			  spawnNewMonster();
 			};
 
 		return {
 		  'spawnNewMonster':spawnNewMonster,
 		  'getMonsterStates':getMonsterStates,
-		  'moveMonsters':moveMonsters
+		  'moveMonsters':moveMonsters,
+		  'startSpawn':startSpawn,
+		  'isTileFree':isTileFree
 		};
 
 	  })(),
@@ -613,7 +664,7 @@ console.log(a,b,c);
 				  Player.moveToEntrance();
 				  // set render list to be whole map
 				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
-				  MonsterSpawner.spawnNewMonster();
+				  MonsterSpawner.startSpawn();
 				  // start tick
 				  tick();
 				  // listen for keyboard input
