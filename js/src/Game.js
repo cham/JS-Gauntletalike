@@ -81,6 +81,7 @@
 				  tilepositions = data.tilepositions;
 				  playerstates = data.playerstates;
 				  monsterstates = data.monsterstates;
+				  missilestates = data.missilestates;
 				  // load images, onload create canvas elements and execute cb when both done
 				  mapimg.onload = function(){
 					var ctx = mapsprite.getContext( '2d' );
@@ -118,6 +119,8 @@ console.log(a,b,c);
 				return { canvas: charactersprite , x: playerstates[  facing ][ salt ].x  , y: playerstates[  facing ][ salt ].y , tiledims: pixel_dims };
 			  }else if( tiletype === 'monster' ){
 				return { canvas: charactersprite , x: monsterstates[ facing ][ salt ].x  , y: monsterstates[ facing ][ salt ].y , tiledims: pixel_dims };
+			  }else if( tiletype === 'missile' ){
+				return { canvas: charactersprite , x: missilestates[ facing ][ salt ].x  , y: missilestates[ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else{
 				return { canvas: mapsprite , x: tilepositions[ tiletype ].x , y: tilepositions[ tiletype ].y , tiledims: pixel_dims };
 			  }
@@ -247,20 +250,12 @@ console.log(a,b,c);
 		  }
 		  // set facing
 		  switch( this.moving[0] ){
-			case -1:
-			  this.facing = 'left';
-			  break;
-			case 1:
-			  this.facing = 'right';
-			  break;
+			case -1: this.facing = 'left'; break;
+			case 1: this.facing = 'right'; break;
 		  }
 		  switch( this.moving[1] ){
-			case -1:
-			  this.facing = 'up';
-			  break;
-			case 1:
-			  this.facing = 'down';
-			  break;
+			case -1: this.facing = 'up'; break;
+			case 1:  this.facing = 'down'; break;
 		  }
 		  if( playerPos.x === this.coords.x && playerPos.y === this.coords.y ){
 			Game.stop();
@@ -291,7 +286,7 @@ console.log(a,b,c);
 		var monsters = [], // array of monster objects the spawner has spawned
 			autoSpawn = false,
 			spawntime = 5 * 1000,
-			coords = {x:17,y:7}, // coordinates to spawn new monsters at
+			coords = {x:16,y:7}, // coordinates to spawn new monsters at TODO dynamicalise!
 			/**
 			 * spawnNewMonster
 			 * creates a new monster object and runs initialisation methods on it
@@ -361,9 +356,17 @@ console.log(a,b,c);
 			pixeldims ,
 			updateList = [] ,
 			playerSwitch = 7 ,
+			/**
+			 * clear
+			 * clears the whole map
+			 */
 			clear = function(){
 			  ctx.clearRect( 0 , 0 , ( map.mapdims.x * pixeldims.x ) , ( map.mapdims.y * pixeldims.y ) );
 			},
+			/**
+			 * drawTile
+			 * draws a tile at the position specified, with dimensions, tileType, [index,facing,offset]
+			 */
 			drawTile = function( ox , oy , dx , dy , tileType , tileIndex , facing , offS ){
 			  var spriteInfo , chunk , offset = offS || {x:0,y:0};
 			  spriteInfo = Tileset.getSpriteInfo( tileType , tileIndex , facing );
@@ -405,6 +408,16 @@ console.log(a,b,c);
 				drawTile( ox , oy , ox + tx , oy + ty , 'monster' , +( playerSwitch > 3 ) , mState.facing , mState.offset );
 			  } );
 			},
+			drawMissiles = function(){
+			  var missileStates = MissileLauncher.getStates() ,
+				  tx = pixeldims.x , ty = pixeldims.y ,
+				  ox,oy;
+			  _( missileStates ).each( function( mState ){
+				ox = mState.coords.x * tx ,
+				oy = mState.coords.y * ty;
+				drawTile( ox , oy , ox + tx , oy + ty , 'missile' , +( playerSwitch > 3 ) , mState.facing , mState.offset );
+			  } );
+			},
 			render = function(){
 			  map = Stage.getMap();
 			  ctx = Stage.getContext();
@@ -415,6 +428,8 @@ console.log(a,b,c);
 			  drawPlayer();
 			  // draw monsters
 			  drawMonsters();
+			  // draw missiles
+			  drawMissiles();
 			  updateList = []; // empty updatelist for next render
 			};
 
@@ -497,6 +512,185 @@ console.log(a,b,c);
 
 	  })(),
 
+	  Missile = {
+		coords: {x:0,y:0},
+		offset: {x:0,y:0},
+		moving: [0,0],
+		facing: 'down',
+		speed: 8,
+		/**
+		 * setPosition
+		 * sets the position and offset
+		 */
+		setPosition: function( co , off ){
+		  this.coords = co;
+		  this.offset = off;
+		},
+		/**
+		 * setMovement
+		 * sets movement in the vector specified
+		 */
+		setMovement: function( v ){
+		  this.moving = v;
+		},
+		/**
+		 * getNewOffset
+		 * returns a new offset for the Missile
+		 */
+		getNewOffset: function(){
+		  var newX = this.offset.x + ( this.moving[0] * this.speed ) ,
+			  newY = this.offset.y + ( this.moving[1] * this.speed ) ,
+			  tileX = 0, tileY = 0;
+		  // check for tile movement in x
+		  if( newX > 12  ){ newX -= 24; tileX = 1; }
+		  if( newX < -12 ){  newX += 24; tileX = -1; }
+		  if( newY > 4  ){ newY -= 24; tileY = 1; }
+		  if( newY < -20 ){  newY += 24; tileY = -1; }
+		  return {
+			x: newX ,
+			y: newY ,
+			tileX: tileX,
+			tileY: tileY
+		  };
+		},
+		/**
+		 * getTilesToRedraw
+		 * returns an array of tile indexes to redraw on the tile the Missile is on and those around it
+		 */
+		getTilesToRedraw: function(){
+		  // tiles to redraw are the current position and all surrounding tiles
+		  var currentIndex = Stage.getIndexFor( this.coords ) ,
+			  map = Stage.getMap() ,
+			  maxIndex = map.mapdata.length ,
+			  mapDims = map.mapdims , mw = mapDims.x , mh = mapDims.y ,
+			  candidatePoints = [
+				currentIndex - ( mw - 1 ) ,
+				currentIndex - mw ,
+				currentIndex - ( mw + 1 ) ,
+				currentIndex - 1 ,
+				currentIndex ,
+				currentIndex + 1 ,
+				currentIndex + ( mw - 1 ) ,
+				currentIndex + mw ,
+				currentIndex + ( mw + 1 )
+			  ];
+		  return _.select( candidatePoints , function( index ){
+			return index > -1 && index < maxIndex;
+		  } );
+		},
+		/**
+		 * hitWall
+		 * returns true if the Missile has hit a wall, otherwise false
+		 */
+		hitWall: function(){
+		  var tile = Stage.getTileAt( this.coords );
+		  if( tile.substr(0,1) === 'w' ){
+			return true;
+		  }
+		  return false;
+		},
+		/**
+		 * move
+		 * moves the Missile
+		 */
+		move: function(){
+		  // get new offset and set new tile position if moving tile
+		  var newOffset = this.getNewOffset() ,
+			  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY } ,
+			  tile = Stage.getTileAt( newTilePos ) ,
+			  tilesToUpdate = [];
+		  // set facing
+		  switch( this.moving[0] ){
+			case -1: this.facing = 'left';  break;
+			case  1: this.facing = 'right'; break;
+		  }
+		  switch( this.moving[1] ){
+			case -1: this.facing = 'up'; break;
+			case  1: this.facing = 'down'; break;
+		  }
+		  // set new offset and tile position if moving into a floor tile
+		  //if( tile.substr(0,1) === "f" ){
+			this.offset.x = newOffset.x;
+			this.offset.y = newOffset.y;
+			this.coords = newTilePos;
+		  //}
+		  // get indexes of tiles to redraw
+		  tilesToUpdate = this.getTilesToRedraw();
+		  _( tilesToUpdate ).each( function( tileIndex ){
+			Renderer.queueForUpdate( tileIndex );
+		  });
+		},
+		getFacing: function(){
+		  return this.facing;
+		},
+		getPosition: function(){
+		  return this.coords;
+		},
+		getOffset: function(){
+		  return this.offset;
+		},
+		clone: function(){
+		  function F() {}
+		  F.prototype = this;
+		  return new F();
+		}
+	  },
+
+	  MissileLauncher = (function(){
+		var missiles = [],
+			/**
+			 * fireMissile
+			 * fires a new Missile object
+			 * @param Object coords co-ordinates as {x:y:}
+			 */
+			fireMissile = function( coords , offset , movement ){
+			  var missile = Missile.clone();
+			  missile.setPosition( coords , offset );
+			  missile.setMovement( movement );
+			  missiles.push( missile );
+			},
+			/**
+			 * moveMissiles
+			 * runs move() on every Missile in the stack
+			 */
+			moveMissiles = function(){
+			  var notDead = []; // missiles that are not dead
+			  _( missiles ).each( function( missile ){
+				if( !missile.hitWall() ){ // if not hit wall then move and push to not dead stack
+				  missile.move();
+				  notDead.push( missile );
+				}else{
+				  // redraw area around where the missile died
+				  _( missile.getTilesToRedraw() ).each( function( tile ){
+					Renderer.queueForUpdate( tile );
+				  });
+				}
+			  } );
+			  missiles = notDead;
+			},
+			/**
+			 * getStates
+			 * returns position and movement state of each missile
+			 */
+			getStates = function(){
+			  var states = [];
+			  _( missiles ).each( function( missile ){
+				states.push( {
+				  'facing': missile.getFacing(),
+				  'coords': missile.getPosition(),
+				  'offset': missile.getOffset()
+				} );
+			  });
+			  return states;
+			};
+
+		return {
+		  fireMissile: fireMissile,
+		  moveMissiles: moveMissiles,
+		  getStates: getStates
+		}
+	  })(),
+
 	  Player = (function(){
 
 		var intile = {x:0,y:0} ,
@@ -504,12 +698,59 @@ console.log(a,b,c);
 			facing = 'down',
 			pixel_offset = {x:0,y:0},
 			movementSpeed = 5,
+
+			/**
+			 * checkMovement
+			 * checks local moving vector is valid and sets closest possible if not
+			 */
+			checkMovement = function(){
+			  var vectX = [ moving[ 0 ] , 0 ], vectY = [ 0 , moving[ 1 ] ],
+				  newOffset = getNewOffset() ,
+				  newTilePos = { x: intile.x + newOffset.tileX , y: intile.y + newOffset.tileY } ,
+				  tile = Stage.getTileAt( newTilePos );
+			  // if tile in vectorToPlayer direction is a floor tile, return - movement is ok
+			  if( tile.substr(0,1) === 'f' ){
+				return moving;
+			  }else{
+				// else if tile in x is ok
+				tile = Stage.getTileAt( { x: intile.x + newOffset.tileX , y: intile.y } );
+				if( tile.substr(0,1) === 'f' ){
+				  return vectX;
+				}else{
+				  // else if tile in y is ok
+				  tile = Stage.getTileAt( { x: intile.x , y: intile.y + newOffset.tileY } );
+				  if( tile.substr(0,1) === 'f' ){
+					return vectY;
+				  }else{
+					return [ 0 , 0 ];
+				  }
+				}
+			  }
+			},
+			/**
+			 * fire
+			 * fires a Missile in the current movement or direction facing
+			 */
+			fire = function(){
+			  var vect = moving;
+			  // if not moving use facing
+			  if( vect[ 0 ] === 0 && vect[ 1 ] === 0 ){
+				switch( facing ){
+				  case 'up'  : vect = [  0 , -1 ]; break;
+				  case 'down': vect = [  0 ,  1 ]; break;
+				  case 'left': vect = [ -1 ,  0 ]; break;
+				  default    : vect = [  1 ,  0 ]; break;
+				}
+			  }
+			  MissileLauncher.fireMissile( {x:intile.x,y:intile.y} , {x:pixel_offset.x,y:pixel_offset.y} , [vect[0],vect[1]] );
+			},
 			moveToEntrance = function(){
 			  intile = Stage.getEntrance();
 			},
-			getNewOffset = function(){
-			  var newX = pixel_offset.x + ( moving[0] * movementSpeed ) ,
-				  newY = pixel_offset.y + ( moving[1] * movementSpeed ) ,
+			getNewOffset = function( checkedMovement ){
+			  var movementVector = checkedMovement || moving; // if no movement vector passed then use player defined / local vector
+			  var newX = pixel_offset.x + ( movementVector[0] * movementSpeed ) ,
+				  newY = pixel_offset.y + ( movementVector[1] * movementSpeed ) ,
 				  tileX = 0, tileY = 0;
 			  // check for tile movement in x
 			  if( newX > 12  ){ newX -= 24; tileX = 1; }
@@ -545,13 +786,18 @@ console.log(a,b,c);
 			  } );
 			},
 			move = function(){
+			  var checkedMovement = checkMovement();
+			  // if not moving exit
+			  if( checkedMovement[ 0 ] === 0 && checkedMovement[ 1 ] === 0 ){
+				return;
+			  }
 			  // get new offset and set new tile position if moving tile
-			  var newOffset = getNewOffset() ,
+			  var newOffset = getNewOffset( checkedMovement ) ,
 				  newTilePos = { x: intile.x + newOffset.tileX , y: intile.y + newOffset.tileY } ,
 				  tile = Stage.getTileAt( newTilePos ) ,
 				  tilesToUpdate = [];
 			  // set facing
-			  switch( moving[0] ){
+			  switch( checkedMovement[0] ){
 				case -1:
 				  facing = 'left';
 				  break;
@@ -559,7 +805,7 @@ console.log(a,b,c);
 				  facing = 'right';
 				  break;
 			  }
-			  switch( moving[1] ){
+			  switch( checkedMovement[1] ){
 				case -1:
 				  facing = 'up';
 				  break;
@@ -587,6 +833,7 @@ console.log(a,b,c);
 
 		  moveToEntrance: moveToEntrance,
 		  move:move,
+		  fire:fire,
 		  setMovement:setMovement,
 		  getTile:function(){return intile;},
 		  getOffset:function(){return pixel_offset;},
@@ -613,6 +860,10 @@ console.log(a,b,c);
 				break;
 			  case 'd':
 				Player.setMovement(0,1);
+				break;
+			  case ' ':
+console.log( 'fire!' );
+				Player.fire();
 				break;
 			  default:
 				break;
@@ -650,6 +901,7 @@ console.log(a,b,c);
 			tick = function(){
 			  Player.move();
 			  MonsterSpawner.moveMonsters();
+			  MissileLauncher.moveMissiles();
 			  Renderer.render();
 			  if( !stopped ){
 				t = window.setTimeout( tick , frametime );
