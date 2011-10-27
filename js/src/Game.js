@@ -222,9 +222,6 @@ console.log(a,b,c);
 			  }
 			}
 		  }
-
-		  // else no movement
-
 		},
 		/**
 		 * move
@@ -285,7 +282,7 @@ console.log(a,b,c);
 
 		var monsters = [], // array of monster objects the spawner has spawned
 			autoSpawn = false,
-			spawntime = 5 * 1000,
+			spawntime = 4 * 1000,
 			coords = {x:16,y:7}, // coordinates to spawn new monsters at TODO dynamicalise!
 			/**
 			 * spawnNewMonster
@@ -309,13 +306,14 @@ console.log(a,b,c);
 				monster.move();
 			  });
 			},
-			getMonsterStates = function(){
+			getStates = function(){
 			  var states = [];
 			  _( monsters ).each( function( monster ){
 				states.push( {
 				  'facing': monster.getFacing(),
 				  'coords': monster.getPosition(),
-				  'offset': monster.getOffset()
+				  'offset': monster.getOffset(),
+				  'monster': monster
 				} );
 			  });
 			  return states;
@@ -328,6 +326,19 @@ console.log(a,b,c);
 				return ( mPos.x === checkCoords.x && mPos.y === checkCoords.y && monster !== ignoreMonster );
 			  } ).length < 1;
 			},
+			/**
+			 * killMonster
+			 * kills the monster specified
+			 */
+			killMonster = function( m ){
+			  // remove from local array
+			  monsters = _( monsters ).without( m );
+			  // set tiles for update
+			  var update = m.getTilesToRedraw();
+			  _( update ).each( function( tile ){
+				Renderer.queueForUpdate( tile );
+			  });
+			},
 			startSpawn = function(){
 			  autoSpawn = true;
 			  spawnNewMonster();
@@ -335,10 +346,11 @@ console.log(a,b,c);
 
 		return {
 		  'spawnNewMonster':spawnNewMonster,
-		  'getMonsterStates':getMonsterStates,
+		  'getStates':getStates,
 		  'moveMonsters':moveMonsters,
 		  'startSpawn':startSpawn,
-		  'isTileFree':isTileFree
+		  'isTileFree':isTileFree,
+		  'killMonster':killMonster
 		};
 
 	  })(),
@@ -399,7 +411,7 @@ console.log(a,b,c);
 			  drawTile( ox , oy , ox + tx , oy + ty , 'player' , +( playerSwitch > 3 ) , Player.getFacing() , Player.getOffset() );
 			},
 			drawMonsters = function(){
-			  var monsterStates = MonsterSpawner.getMonsterStates() ,
+			  var monsterStates = MonsterSpawner.getStates() ,
 				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox,oy;
 			  _( monsterStates ).each( function( mState ){
@@ -590,6 +602,24 @@ console.log(a,b,c);
 		  return false;
 		},
 		/**
+		 * hitMonster
+		 * returns the Monster if the missile has hit a monster, otherwise false
+		 */
+		hitMonster: function(){
+		  var monsters = MonsterSpawner.getStates() , self = this ,
+			  collisions = [];
+		  _( monsters ).each( function( mState ){
+			var mX = mState.coords.x ,
+				mY = mState.coords.y ,
+				sX = self.coords.x ,
+				sY = self.coords.y;
+			if( mX === sX && mY === sY ){
+			  collisions.push( { monster: mState.monster , missile: self } );
+			}
+		  });
+		  return collisions;
+		},
+		/**
 		 * move
 		 * moves the Missile
 		 */
@@ -654,16 +684,24 @@ console.log(a,b,c);
 			 * runs move() on every Missile in the stack
 			 */
 			moveMissiles = function(){
-			  var notDead = []; // missiles that are not dead
+			  var notDead = [], // missiles that are not dead
+				  collisions = [];
 			  _( missiles ).each( function( missile ){
-				if( !missile.hitWall() ){ // if not hit wall then move and push to not dead stack
-				  missile.move();
-				  notDead.push( missile );
-				}else{
+				collisions = missile.hitMonster();
+				if( missile.hitWall() ){
 				  // redraw area around where the missile died
 				  _( missile.getTilesToRedraw() ).each( function( tile ){
 					Renderer.queueForUpdate( tile );
 				  });
+				}else if( collisions.length ){
+				  // kill all monsters in the collisions array
+				  _( collisions ).each( function( c ){
+					MonsterSpawner.killMonster( c.monster );
+				  });
+				}else{
+				  // else move and push to not dead stack
+				  missile.move();
+				  notDead.push( missile );
 				}
 			  } );
 			  missiles = notDead;
