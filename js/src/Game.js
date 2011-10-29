@@ -112,13 +112,13 @@ console.log(a,b,c);
 			 * @param {String} tiletype
 			 * @param {Number} salt
 			 */
-			getSpriteInfo = function( tiletype , salt , f ){
+			getSpriteInfo = function( tiletype , salt , f , subindex ){
 			  var facing = f || '';
 			  // if player return player sheet else return tilesheet
 			  if( tiletype === 'player' ){
 				return { canvas: charactersprite , x: playerstates[  facing ][ salt ].x  , y: playerstates[  facing ][ salt ].y , tiledims: pixel_dims };
 			  }else if( tiletype === 'monster' ){
-				return { canvas: charactersprite , x: monsterstates[ facing ][ salt ].x  , y: monsterstates[ facing ][ salt ].y , tiledims: pixel_dims };
+				return { canvas: charactersprite , x: monsterstates[ subindex ][ facing ][ salt ].x  , y: monsterstates[ subindex ][ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else if( tiletype === 'missile' ){
 				return { canvas: charactersprite , x: missilestates[ facing ][ salt ].x  , y: missilestates[ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else{
@@ -140,6 +140,7 @@ console.log(a,b,c);
 		moving: [0,0],
 		facing: 'down',
 		movementSpeed: 3,
+		type: 1,
 		getNewOffsetForMovement: function( moveVect ){
 		  var newX = this.offset.x + ( moveVect[0] * this.movementSpeed ) ,
 			  newY = this.offset.y + ( moveVect[1] * this.movementSpeed ) ,
@@ -240,7 +241,7 @@ console.log(a,b,c);
 		  newOffset = this.getNewOffsetForMovement( this.moving );
 		  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY };
 		  tile = Stage.getTileAt( newTilePos );
-		  if( tile.substr(0,1) === "f" && MonsterSpawner.isTileFree( newTilePos , this ) ){
+		  if( tile.substr(0,1) === "f" && MonsterSpawnerCollection.isTileFree( newTilePos , this ) ){
 			this.offset.x = newOffset.x;
 			this.offset.y = newOffset.y;
 			this.coords = newTilePos;
@@ -264,7 +265,21 @@ console.log(a,b,c);
 			Renderer.queueForUpdate( tileIndex );
 		  });
 		},
-		clone: function(){
+		setType: function( mT ){
+		  this.type = mT;
+		  switch( this.type ){
+			case '0':
+			  this.movementSpeed = 3;
+			  break;
+			case '1':
+			  this.movementSpeed = 4;
+			  break;
+			default:
+			  this.movementSpeed = 3;
+			  break;
+		  }
+		},
+		instance: function(){
 		  function F() {}
 		  F.prototype = this;
 		  return new F();
@@ -276,84 +291,200 @@ console.log(a,b,c);
 
 	  /**
 	   * MonsterSpawner
-	   * clones and sets up new Monster objects
+	   * spawns new Monster objects
 	   */
-	  MonsterSpawner = (function(){
+	  MonsterSpawner = {
+		monsters: [], // array of monster objects the spawner has spawned
+		autoSpawn: false,
+		spawntime: 10 * 1000,
+		coords: {x:0,y:0},
+		limit: 0, // if set then only spawns up to this many monsters
+		monsterType: 0,
+		/**
+		 * spawnNewMonster
+		 * creates a new monster object and runs initialisation methods on it
+		 */
+		spawnNewMonster: function(){
+		  var self = this , monster;
+		  if( !this.limit || this.limit > this.monsters.length ){
+			monster = Monster.instance();
+			monster.setPosition( this.coords );
+			monster.setOffset( { x:0 , y:0 } );
+			monster.setType( this.monsterType );
+			this.monsters.push( monster );
+		  }
+		  if( this.autoSpawn ){
+			window.setTimeout( function(){ self.spawnNewMonster(); } , this.spawntime );
+		  }
+		},
+		/**
+		 * moveMonsters
+		 * moves all monsters in local array
+		 */
+		moveMonsters: function(){
+		  _( this.monsters ).each( function( monster ){
+			monster.move();
+		  });
+		},
+		getStates: function(){
+		  var states = [];
+		  _( this.monsters ).each( function( monster ){
+			states.push( {
+			  'facing': monster.getFacing(),
+			  'coords': monster.getPosition(),
+			  'offset': monster.getOffset(),
+			  'monster': monster
+			} );
+		  });
+		  return states;
+		},
+		// TODO this probably needs to go in the monster spawner collection when that exists
+		isTileFree: function( checkCoords , ignoreMonster ){
+		  var mPos;
+		  return _( this.monsters ).select( function( monster ){
+			mPos = monster.getPosition();
+			return ( mPos.x === checkCoords.x && mPos.y === checkCoords.y && monster !== ignoreMonster );
+		  } ).length < 1;
+		},
+		/**
+		 * killMonster
+		 * kills the monster specified
+		 */
+		killMonster: function( m ){
+		  // remove from local array
+		  this.monsters = _( this.monsters ).without( m );
+		  // set tiles for update
+		  var update = m.getTilesToRedraw();
+		  _( update ).each( function( tile ){
+			Renderer.queueForUpdate( tile );
+		  });
+		},
+		startSpawn: function(){
+		  this.autoSpawn = true;
+		  this.spawnNewMonster();
+		},
+		/**
+		 * sets
+		 */
+		setMonsterType: function( mType ){
+		  this.monsterType = mType;
+		},
+		setMonsters: function( arr ){
+		  this.monsters = arr;
+		},
+		setSpawntime: function( t ){
+		  this.spawntime = t;
+		},
+		setCoords: function( obj ){
+		  this.coords = obj;
+		},
+		setLimit: function( l ){
+		  this.limit = l;
+		},
+		instance: function(){
+		  function F() {}
+		  F.prototype = this;
+		  return new F();
+		}
+	  },
 
-		var monsters = [], // array of monster objects the spawner has spawned
-			autoSpawn = false,
-			spawntime = 4 * 1000,
-			coords = {x:16,y:7}, // coordinates to spawn new monsters at TODO dynamicalise!
+	  /**
+	   * MonsterSpawnerCollection
+	   * creates MonsterSpawners
+	   */
+	  MonsterSpawnerCollection = (function(){
+
+		var	monstersPerSpawner = 4,
+			spawners = [],
 			/**
-			 * spawnNewMonster
-			 * creates a new monster object and runs initialisation methods on it
+			 * makeSpawner
+			 * makes a new spawner at the specified position
 			 */
-			spawnNewMonster = function(){
-			  var monster = Monster.clone();
-			  monster.setPosition( coords );
-			  monster.setOffset( { x:0 , y:0 } );
-			  monsters.push( monster );
-			  if( autoSpawn ){
-				window.setTimeout( spawnNewMonster , spawntime );
+			makeSpawner = function( type , coords , sTime , dTime ){
+			  var spawntime = sTime || 10 * 1000 ,
+				  delaytime = dTime || 0;
+			  // inner function - either run now or on startdelay
+			  doMakeSpawner = function(){
+				var spawner = MonsterSpawner.instance();
+				spawner.setMonsterType( type );
+				spawner.setMonsters([]);
+				spawner.setLimit( monstersPerSpawner );
+				spawner.setSpawntime( spawntime );
+				spawner.setCoords( { x: coords.x , y: coords.y } );
+				spawner.startSpawn();
+				spawners.push( spawner );
+			  };
+			  if( delaytime ){
+				window.setTimeout( doMakeSpawner , delaytime );
+			  }else{
+				doMakeSpawner();
 			  }
 			},
 			/**
-			 * moveMonsters
-			 * moves all monsters in local array
+			 * makeAllSpawners
+			 * iterates over every tile in the map and creates a new MonsterSpawner at any 's' tiles it finds
 			 */
-			moveMonsters = function(){
-			  _( monsters ).each( function( monster , i ){
-				monster.move();
+			makeAllSpawners = function(){
+			  var self = this,
+				  mapdata = Stage.getMap().mapdata ,
+				  coords = {} , type;
+			  _( mapdata ).each( function( tile , i ){
+				if( tile.substr( 0 , 1 ) === 's' ){
+				  type = tile.substr( 1 , 1 );
+				  coords = Stage.getCoordsFor( i );
+				  self.makeSpawner( type , {x:coords.x , y:coords.y+1 } , ( 3000 + ~~( Math.random() * 5 * 1000 )) , ~~( Math.random() * 5 * 1000 ) );
+				}
 			  });
 			},
-			getStates = function(){
-			  var states = [];
-			  _( monsters ).each( function( monster ){
-				states.push( {
-				  'facing': monster.getFacing(),
-				  'coords': monster.getPosition(),
-				  'offset': monster.getOffset(),
-				  'monster': monster
-				} );
-			  });
-			  return states;
+			/**
+			 * getAllMonsterStates
+			 */
+			getAllMonsterStates = function(){
+			  var totStates = [] , mStates;
+			  _( spawners ).each( function( spawner ){
+				mStates = spawner.getStates();
+				totStates = _( totStates ).union( mStates );
+			  } );
+			  return totStates;
 			},
-			// TODO this probably needs to go in the monster spawner collection when that exists
-			isTileFree = function( checkCoords , ignoreMonster ){
-			  var mPos;
-			  return _( monsters ).select( function( monster ){
-				mPos = monster.getPosition();
-				return ( mPos.x === checkCoords.x && mPos.y === checkCoords.y && monster !== ignoreMonster );
-			  } ).length < 1;
+			/**
+			 * moveAllMonsters
+			 */
+			moveAllMonsters = function(){
+			  _( spawners ).each( function( spawner ){
+				spawner.moveMonsters();
+			  } );
 			},
 			/**
 			 * killMonster
-			 * kills the monster specified
 			 */
 			killMonster = function( m ){
-			  // remove from local array
-			  monsters = _( monsters ).without( m );
-			  // set tiles for update
-			  var update = m.getTilesToRedraw();
-			  _( update ).each( function( tile ){
-				Renderer.queueForUpdate( tile );
+			  _( spawners ).each( function( spawner ){
+				spawner.killMonster( m );
 			  });
 			},
-			startSpawn = function(){
-			  autoSpawn = true;
-			  spawnNewMonster();
+			/**
+			 * isTileFree
+			 */
+			isTileFree = function( tile , ignoreMonster ){
+			  var isFree = true;
+			  _( spawners ).each( function( spawner ){
+				if( !spawner.isTileFree( tile , ignoreMonster ) ){
+				  isFree = false;
+				}
+			  });
+			  return isFree;
 			};
 
 		return {
-		  'spawnNewMonster':spawnNewMonster,
-		  'getStates':getStates,
-		  'moveMonsters':moveMonsters,
-		  'startSpawn':startSpawn,
-		  'isTileFree':isTileFree,
-		  'killMonster':killMonster
+		  makeSpawner:makeSpawner,
+		  makeAllSpawners:makeAllSpawners,
+		  getAllMonsterStates:getAllMonsterStates,
+		  moveAllMonsters:moveAllMonsters,
+		  killMonster:killMonster,
+		  isTileFree:isTileFree
 		};
-
-	  })(),
+	  })();
 
 	  /**
 	   * Renderer
@@ -379,9 +510,9 @@ console.log(a,b,c);
 			 * drawTile
 			 * draws a tile at the position specified, with dimensions, tileType, [index,facing,offset]
 			 */
-			drawTile = function( ox , oy , dx , dy , tileType , tileIndex , facing , offS ){
+			drawTile = function( ox , oy , dx , dy , tileType , tileIndex , facing , offS , subindex ){
 			  var spriteInfo , chunk , offset = offS || {x:0,y:0};
-			  spriteInfo = Tileset.getSpriteInfo( tileType , tileIndex , facing );
+			  spriteInfo = Tileset.getSpriteInfo( tileType , tileIndex , facing , subindex );
 			  //chunk = spriteInfo.canvas.getContext( '2d' ).getImageData( spriteInfo.x , spriteInfo.y , spriteInfo.tiledims.x , spriteInfo.tiledims.y );
 			  //ctx.putImageData( chunk , ox , oy );
 			  try {
@@ -404,20 +535,17 @@ console.log(a,b,c);
 				  tx = pixeldims.x , ty = pixeldims.y ,
 				  ox = pc.x * tx ,
 				  oy = pc.y * ty;
-			  playerSwitch--;
-			  if( playerSwitch < 0 ){
-				playerSwitch = 7;
-			  }
 			  drawTile( ox , oy , ox + tx , oy + ty , 'player' , +( playerSwitch > 3 ) , Player.getFacing() , Player.getOffset() );
 			},
 			drawMonsters = function(){
-			  var monsterStates = MonsterSpawner.getStates() ,
+			  var monsterStates = MonsterSpawnerCollection.getAllMonsterStates() ,
 				  tx = pixeldims.x , ty = pixeldims.y ,
-				  ox,oy;
+				  ox,oy, monsterType;
 			  _( monsterStates ).each( function( mState ){
-				ox = mState.coords.x * tx ,
+				ox = mState.coords.x * tx;
 				oy = mState.coords.y * ty;
-				drawTile( ox , oy , ox + tx , oy + ty , 'monster' , +( playerSwitch > 3 ) , mState.facing , mState.offset );
+				monsterType = mState.monster.type;
+				drawTile( ox , oy , ox + tx , oy + ty , 'monster' , +( playerSwitch > 3 ) , mState.facing , mState.offset , monsterType );
 			  } );
 			},
 			drawMissiles = function(){
@@ -430,10 +558,16 @@ console.log(a,b,c);
 				drawTile( ox , oy , ox + tx , oy + ty , 'missile' , +( playerSwitch > 3 ) , mState.facing , mState.offset );
 			  } );
 			},
-			render = function(){
+			init = function(){
 			  map = Stage.getMap();
 			  ctx = Stage.getContext();
 			  pixeldims = Tileset.getPixelDims();
+			},
+			render = function(){
+			  playerSwitch--;
+			  if( playerSwitch < 0 ){
+				playerSwitch = 7;
+			  }
 			  // draw background
 			  drawBackground();
 			  // draw player
@@ -446,6 +580,8 @@ console.log(a,b,c);
 			};
 
 		return {
+		  init: init,
+		  clear: clear,
 		  render: render,
 		  queueForUpdate: function( index ){ updateList.push( index ); },
 		  setUpdateList: function( ul ){ updateList = ul; }
@@ -606,7 +742,7 @@ console.log(a,b,c);
 		 * returns the Monster if the missile has hit a monster, otherwise false
 		 */
 		hitMonster: function(){
-		  var monsters = MonsterSpawner.getStates() , self = this ,
+		  var monsters = MonsterSpawnerCollection.getAllMonsterStates() , self = this ,
 			  collisions = [];
 		  _( monsters ).each( function( mState ){
 			var mX = mState.coords.x ,
@@ -659,7 +795,7 @@ console.log(a,b,c);
 		getOffset: function(){
 		  return this.offset;
 		},
-		clone: function(){
+		instance: function(){
 		  function F() {}
 		  F.prototype = this;
 		  return new F();
@@ -674,7 +810,7 @@ console.log(a,b,c);
 			 * @param Object coords co-ordinates as {x:y:}
 			 */
 			fireMissile = function( coords , offset , movement ){
-			  var missile = Missile.clone();
+			  var missile = Missile.instance();
 			  missile.setPosition( coords , offset );
 			  missile.setMovement( movement );
 			  missiles.push( missile );
@@ -696,7 +832,7 @@ console.log(a,b,c);
 				}else if( collisions.length ){
 				  // kill all monsters in the collisions array
 				  _( collisions ).each( function( c ){
-					MonsterSpawner.killMonster( c.monster );
+					MonsterSpawnerCollection.killMonster( c.monster );
 				  });
 				}else{
 				  // else move and push to not dead stack
@@ -746,18 +882,18 @@ console.log(a,b,c);
 				  newOffset = getNewOffset() ,
 				  newTilePos = { x: intile.x + newOffset.tileX , y: intile.y + newOffset.tileY } ,
 				  tile = Stage.getTileAt( newTilePos );
-			  // if tile in vectorToPlayer direction is a floor tile, return - movement is ok
-			  if( tile.substr(0,1) === 'f' ){
+			  // if tile is a floor tile, return - movement is ok
+			  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 'c' ){
 				return moving;
 			  }else{
 				// else if tile in x is ok
 				tile = Stage.getTileAt( { x: intile.x + newOffset.tileX , y: intile.y } );
-				if( tile.substr(0,1) === 'f' ){
+				if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 'c' ){
 				  return vectX;
 				}else{
 				  // else if tile in y is ok
 				  tile = Stage.getTileAt( { x: intile.x , y: intile.y + newOffset.tileY } );
-				  if( tile.substr(0,1) === 'f' ){
+				  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 'c' ){
 					return vectY;
 				  }else{
 					return [ 0 , 0 ];
@@ -833,26 +969,19 @@ console.log(a,b,c);
 			  var newOffset = getNewOffset( checkedMovement ) ,
 				  newTilePos = { x: intile.x + newOffset.tileX , y: intile.y + newOffset.tileY } ,
 				  tile = Stage.getTileAt( newTilePos ) ,
+				  tileType = tile.substr(0,1),
 				  tilesToUpdate = [];
 			  // set facing
 			  switch( checkedMovement[0] ){
-				case -1:
-				  facing = 'left';
-				  break;
-				case 1:
-				  facing = 'right';
-				  break;
+				case -1: facing = 'left'; break;
+				case 1:  facing = 'right'; break;
 			  }
 			  switch( checkedMovement[1] ){
-				case -1:
-				  facing = 'up';
-				  break;
-				case 1:
-				  facing = 'down';
-				  break;
+				case -1: facing = 'up'; break;
+				case 1:  facing = 'down'; break;
 			  }
-			  // set new offset and tile position if moving into a floor tile
-			  if( tile.substr(0,1) === "f" ){
+			  // set new offset and tile position if moving into a floor tile or castle
+			  if( tileType === 'f' || tileType === 'c'  ){
 				pixel_offset.x = newOffset.x;
 				pixel_offset.y = newOffset.y;
 				intile = newTilePos;
@@ -862,6 +991,11 @@ console.log(a,b,c);
 			  _( tilesToUpdate ).each( function( tileIndex ){
 				Renderer.queueForUpdate( tileIndex );
 			  });
+			  // if player has reached the castle then load next level
+			  if( tileType === 'c' ){
+				Game.stop();
+				alert( 'You win! Next level goes here!' );
+			  }
 			},
 			setMovement = function( index , val ){
 			  moving[ index ] = val;
@@ -900,7 +1034,6 @@ console.log(a,b,c);
 				Player.setMovement(0,1);
 				break;
 			  case ' ':
-console.log( 'fire!' );
 				Player.fire();
 				break;
 			  default:
@@ -937,8 +1070,9 @@ console.log( 'fire!' );
 			t,
 			stopped = false,
 			tick = function(){
+			  //Renderer.clear();
 			  Player.move();
-			  MonsterSpawner.moveMonsters();
+			  MonsterSpawnerCollection.moveAllMonsters();
 			  MissileLauncher.moveMissiles();
 			  Renderer.render();
 			  if( !stopped ){
@@ -952,9 +1086,11 @@ console.log( 'fire!' );
 				Stage.load( 1 , function(){
 				  // move player to entrance
 				  Player.moveToEntrance();
+				  Renderer.init();
 				  // set render list to be whole map
 				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
-				  MonsterSpawner.startSpawn();
+				  // make all monster spawners
+				  MonsterSpawnerCollection.makeAllSpawners();
 				  // start tick
 				  tick();
 				  // listen for keyboard input
