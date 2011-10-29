@@ -872,7 +872,7 @@ console.log(a,b,c);
 			facing = 'down',
 			pixel_offset = {x:0,y:0},
 			movementSpeed = 5,
-
+			canfire = true,
 			/**
 			 * checkMovement
 			 * checks local moving vector is valid and sets closest possible if not
@@ -906,6 +906,8 @@ console.log(a,b,c);
 			 * fires a Missile in the current movement or direction facing
 			 */
 			fire = function(){
+			  if( !canfire ){ return; }
+			  canfire = false;
 			  var vect = moving;
 			  // if not moving use facing
 			  if( vect[ 0 ] === 0 && vect[ 1 ] === 0 ){
@@ -917,6 +919,9 @@ console.log(a,b,c);
 				}
 			  }
 			  MissileLauncher.fireMissile( {x:intile.x,y:intile.y} , {x:pixel_offset.x,y:pixel_offset.y} , [vect[0],vect[1]] );
+			},
+			allowFiring = function(){
+			  canfire = true;
 			},
 			moveToEntrance = function(){
 			  intile = Stage.getEntrance();
@@ -1006,6 +1011,7 @@ console.log(a,b,c);
 		  moveToEntrance: moveToEntrance,
 		  move:move,
 		  fire:fire,
+		  allowFiring:allowFiring,
 		  setMovement:setMovement,
 		  getTile:function(){return intile;},
 		  getOffset:function(){return pixel_offset;},
@@ -1021,16 +1027,16 @@ console.log(a,b,c);
 		  jQuery( document ).keydown( function(e){
 			var which = String.fromCharCode( e.which ).toLowerCase();
 			switch( which ){
-			  case 'w':
+			  case 'w': case '&':
 				Player.setMovement(1,-1);
 				break;
-			  case 'a':
+			  case 'a': case '%':
 				Player.setMovement(0,-1);
 				break;
-			  case 's':
+			  case 's': case '(':
 				Player.setMovement(1,1);
 				break;
-			  case 'd':
+			  case 'd': case '\'':
 				Player.setMovement(0,1);
 				break;
 			  case ' ':
@@ -1042,15 +1048,16 @@ console.log(a,b,c);
 		  }).keyup( function(e){
 			var which = String.fromCharCode( e.which ).toLowerCase();
 			switch( which ){
-			  case 'w':
-			  case 's':
-				Player.setMovement(1,0);
+			  case 'w': case '&':
+			  case 's': case '(':
 				Player.setMovement(1,0);
 				break;
-			  case 'a':
-			  case 'd':
+			  case 'a': case '%':
+			  case 'd': case '\'':
 				Player.setMovement(0,0);
-				Player.setMovement(0,0);
+				break;
+			  case ' ':
+				Player.allowFiring();
 				break;
 			  default:
 				break;
