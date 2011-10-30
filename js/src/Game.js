@@ -694,6 +694,9 @@ console.log(a,b,c);
 			  return ( ind + coords.x );
 			},
 			updateHealth = function( h ){
+			  $_health.css({
+				color: (h<25)?'#f00':'#000'
+			  })
 			  $_health.text( h );
 			};
 
