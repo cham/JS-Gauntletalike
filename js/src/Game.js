@@ -204,19 +204,19 @@ console.log(a,b,c);
 			  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY },
 			  tile = Stage.getTileAt( newTilePos );
 		  // if tile in vectorToPlayer direction is a floor tile, set it and return
-		  if( tile.substr(0,1) === 'f' ){
+		  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' ){
 			this.moving = vectorToPlayer;
 		  }else{
 			// else if tile in x is ok
 			newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y };
 			tile = Stage.getTileAt( newTilePos );
-			if( tile.substr(0,1) === 'f' ){
+			if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' ){
 			  this.moving = vectX;
 			}else{
 			  // else if tile in y is ok
 			  newTilePos = { x: this.coords.x , y: this.coords.y + newOffset.tileY };
 			  tile = Stage.getTileAt( newTilePos );
-			  if( tile.substr(0,1) === 'f' ){
+			  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' ){
 				this.moving = vectY;
 			  }else{
 				this.moving = [ 0 , 0 ];
@@ -241,7 +241,7 @@ console.log(a,b,c);
 		  newOffset = this.getNewOffsetForMovement( this.moving );
 		  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY };
 		  tile = Stage.getTileAt( newTilePos );
-		  if( tile.substr(0,1) === "f" && MonsterSpawnerCollection.isTileFree( newTilePos , this ) ){
+		  if( ( tile.substr(0,1) === "f" || tile.substr(0,1) === 's' ) && MonsterSpawnerCollection.isTileFree( newTilePos , this ) ){
 			this.offset.x = newOffset.x;
 			this.offset.y = newOffset.y;
 			this.coords = newTilePos;
@@ -272,7 +272,7 @@ console.log(a,b,c);
 			  this.movementSpeed = 3;
 			  break;
 			case '1':
-			  this.movementSpeed = 4;
+			  this.movementSpeed = 5;
 			  break;
 			default:
 			  this.movementSpeed = 3;
@@ -298,6 +298,8 @@ console.log(a,b,c);
 		autoSpawn: false,
 		spawntime: 10 * 1000,
 		coords: {x:0,y:0},
+		t:null,
+		stopped:false,
 		limit: 0, // if set then only spawns up to this many monsters
 		monsterType: 0,
 		/**
@@ -305,6 +307,7 @@ console.log(a,b,c);
 		 * creates a new monster object and runs initialisation methods on it
 		 */
 		spawnNewMonster: function(){
+		  if( this.stopped ){ return; }
 		  var self = this , monster;
 		  if( !this.limit || this.limit > this.monsters.length ){
 			monster = Monster.instance();
@@ -314,7 +317,7 @@ console.log(a,b,c);
 			this.monsters.push( monster );
 		  }
 		  if( this.autoSpawn ){
-			window.setTimeout( function(){ self.spawnNewMonster(); } , this.spawntime );
+			this.t = window.setTimeout( function(){ self.spawnNewMonster(); } , this.spawntime );
 		  }
 		},
 		/**
@@ -363,6 +366,11 @@ console.log(a,b,c);
 		  this.autoSpawn = true;
 		  this.spawnNewMonster();
 		},
+		stop: function(){
+		  this.stopped = true;
+		  this.autoSpawn = false;
+		  window.clearTimeout( this.t );
+		},
 		/**
 		 * sets
 		 */
@@ -394,8 +402,11 @@ console.log(a,b,c);
 	   */
 	  MonsterSpawnerCollection = (function(){
 
-		var	monstersPerSpawner = 4,
+		var	monstersPerSpawner = 5,
 			spawners = [],
+			timers = [],
+			minimumSpawnTime = 2000,
+			spawnTimeRange = 4500,
 			/**
 			 * makeSpawner
 			 * makes a new spawner at the specified position
@@ -415,7 +426,7 @@ console.log(a,b,c);
 				spawners.push( spawner );
 			  };
 			  if( delaytime ){
-				window.setTimeout( doMakeSpawner , delaytime );
+				timers.push( window.setTimeout( doMakeSpawner , delaytime ) );
 			  }else{
 				doMakeSpawner();
 			  }
@@ -432,7 +443,7 @@ console.log(a,b,c);
 				if( tile.substr( 0 , 1 ) === 's' ){
 				  type = tile.substr( 1 , 1 );
 				  coords = Stage.getCoordsFor( i );
-				  self.makeSpawner( type , {x:coords.x , y:coords.y+1 } , ( 3000 + ~~( Math.random() * 5 * 1000 )) , ~~( Math.random() * 5 * 1000 ) );
+				  self.makeSpawner( type , {x:coords.x , y:coords.y } , ( minimumSpawnTime + ~~( Math.random() * spawnTimeRange )) , ~~( Math.random() * spawnTimeRange ) );
 				}
 			  });
 			},
@@ -474,9 +485,23 @@ console.log(a,b,c);
 				}
 			  });
 			  return isFree;
+			},
+			/**
+			 * killAll - removes all monster spawners
+			 * note does not update map - tile will still be present
+			 */
+			killAll = function(){
+			  _( spawners ).each( function( spawner ){
+				spawner.stop();
+			  } );
+			  _( timers ).each( function( t ){
+				window.clearTimeout( t );
+			  });
+			  spawners = [];
 			};
 
 		return {
+		  killAll:killAll,
 		  makeSpawner:makeSpawner,
 		  makeAllSpawners:makeAllSpawners,
 		  getAllMonsterStates:getAllMonsterStates,
@@ -883,17 +908,17 @@ console.log(a,b,c);
 				  newTilePos = { x: intile.x + newOffset.tileX , y: intile.y + newOffset.tileY } ,
 				  tile = Stage.getTileAt( newTilePos );
 			  // if tile is a floor tile, return - movement is ok
-			  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 'c' ){
+			  if( tile.substr(0,1) === 'f' ){
 				return moving;
 			  }else{
 				// else if tile in x is ok
 				tile = Stage.getTileAt( { x: intile.x + newOffset.tileX , y: intile.y } );
-				if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 'c' ){
+				if( tile.substr(0,1) === 'f' ){
 				  return vectX;
 				}else{
 				  // else if tile in y is ok
 				  tile = Stage.getTileAt( { x: intile.x , y: intile.y + newOffset.tileY } );
-				  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 'c' ){
+				  if( tile.substr(0,1) === 'f' ){
 					return vectY;
 				  }else{
 					return [ 0 , 0 ];
@@ -986,7 +1011,7 @@ console.log(a,b,c);
 				case 1:  facing = 'down'; break;
 			  }
 			  // set new offset and tile position if moving into a floor tile or castle
-			  if( tileType === 'f' || tileType === 'c'  ){
+			  if( tileType === 'f' ){
 				pixel_offset.x = newOffset.x;
 				pixel_offset.y = newOffset.y;
 				intile = newTilePos;
@@ -997,9 +1022,8 @@ console.log(a,b,c);
 				Renderer.queueForUpdate( tileIndex );
 			  });
 			  // if player has reached the castle then load next level
-			  if( tileType === 'c' ){
-				Game.stop();
-				alert( 'You win! Next level goes here!' );
+			  if( tile === 'fx' ){
+				Game.nextLevel();
 			  }
 			},
 			setMovement = function( index , val ){
@@ -1076,6 +1100,7 @@ console.log(a,b,c);
 		var	frametime = 40,
 			t,
 			stopped = false,
+			mapnum = 3,
 			tick = function(){
 			  //Renderer.clear();
 			  Player.move();
@@ -1090,10 +1115,13 @@ console.log(a,b,c);
 			  // load Tileset images
 			  Tileset.load( function(){
 				// once loaded, load the stage data
-				Stage.load( 1 , function(){
+				Stage.load( mapnum , function(){
+				  stopped = false;
+				  // clear map
+				  Renderer.init();
+				  Renderer.clear();
 				  // move player to entrance
 				  Player.moveToEntrance();
-				  Renderer.init();
 				  // set render list to be whole map
 				  Renderer.setUpdateList( _.keys( Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
 				  // make all monster spawners
@@ -1108,11 +1136,18 @@ console.log(a,b,c);
 			stop = function(){
 			  stopped = true;
 			  window.clearTimeout( t );
+			},
+			nextLevel = function(){
+			  stop();
+			  MonsterSpawnerCollection.killAll();
+			  mapnum++;
+			  start();
 			};
 
 		return {
 		  start: start,
-		  stop: stop
+		  stop: stop,
+		  nextLevel:nextLevel
 		};
 
 	  })();
