@@ -141,6 +141,7 @@ console.log(a,b,c);
 		facing: 'down',
 		movementSpeed: 3,
 		type: 1,
+		damage: 3,
 		getNewOffsetForMovement: function( moveVect ){
 		  var newX = this.offset.x + ( moveVect[0] * this.movementSpeed ) ,
 			  newY = this.offset.y + ( moveVect[1] * this.movementSpeed ) ,
@@ -256,8 +257,7 @@ console.log(a,b,c);
 			case 1:  this.facing = 'down'; break;
 		  }
 		  if( playerPos.x === this.coords.x && playerPos.y === this.coords.y ){
-			Game.stop();
-			alert( 'You were eaten by a grue' );
+			Player.hurt( this.damage );
 		  }
 		  // get indexes of tiles to redraw
 		  tilesToUpdate = this.getTilesToRedraw();
@@ -270,12 +270,15 @@ console.log(a,b,c);
 		  switch( this.type ){
 			case '0':
 			  this.movementSpeed = 3;
+			  this.damage = 3;
 			  break;
 			case '1':
 			  this.movementSpeed = 5;
+			  this.damage = 5;
 			  break;
 			default:
 			  this.movementSpeed = 3;
+			  this.damage = 3;
 			  break;
 		  }
 		},
@@ -602,6 +605,14 @@ console.log(a,b,c);
 			  // draw missiles
 			  drawMissiles();
 			  updateList = []; // empty updatelist for next render
+			},
+			/**
+			 * updateHUD
+			 * updates the HUD - health bar etc
+			 */
+			updateHUD = function(){
+			  // todo don't use dom elements
+			  Stage.updateHealth( Player.getHealth() );
 			};
 
 		return {
@@ -609,7 +620,8 @@ console.log(a,b,c);
 		  clear: clear,
 		  render: render,
 		  queueForUpdate: function( index ){ updateList.push( index ); },
-		  setUpdateList: function( ul ){ updateList = ul; }
+		  setUpdateList: function( ul ){ updateList = ul; },
+		  updateHUD: updateHUD
 		}
 
 	  })(),
@@ -618,6 +630,7 @@ console.log(a,b,c);
 
 		var	map = {},
 			$_canvas = {} ,
+			$_health = {} ,
 			stageDims = {width:null,height:null},
 			ctx = null,
 			makeCanvas = function( w , h ){
@@ -630,6 +643,13 @@ console.log(a,b,c);
 			},
 			injectCanvas = function(){
 			  jQuery( '.game' ).html( $_canvas );
+			},
+			injectHUD = function(){
+			  var $_hud = jQuery( '<div></div>' );
+			  $_health = jQuery( '<span></span>' );
+			  $_hud.append( 'Health: ' );
+			  $_hud.append( $_health );
+			  jQuery( '.game' ).append( $_hud );
 			},
 			load = function( lnum , cb ){
 			  // load the level as JSON
@@ -644,6 +664,8 @@ console.log(a,b,c);
 				makeCanvas( stageDims.width , stageDims.height );
 				// pass to dom
 				injectCanvas();
+				// inject HUD
+				injectHUD();
 				// run callback if passed
 				if( cb ){ cb(); }
 			  });
@@ -670,6 +692,9 @@ console.log(a,b,c);
 			getIndexFor = function( coords ){
 			  var ind = coords.y * map.mapdims.x;
 			  return ( ind + coords.x );
+			},
+			updateHealth = function( h ){
+			  $_health.text( h );
 			};
 
 		return {
@@ -680,7 +705,8 @@ console.log(a,b,c);
 		  getIndexFor:getIndexFor,
 		  getMap:function(){return map;},
 		  getContext:function(){return ctx;},
-		  getCanvas:function(){return $_canvas;}
+		  getCanvas:function(){return $_canvas;},
+		  updateHealth:updateHealth
 		};
 
 	  })(),
@@ -898,6 +924,7 @@ console.log(a,b,c);
 			pixel_offset = {x:0,y:0},
 			movementSpeed = 5,
 			canfire = true,
+			health = 100,
 			/**
 			 * checkMovement
 			 * checks local moving vector is valid and sets closest possible if not
@@ -1028,6 +1055,27 @@ console.log(a,b,c);
 			},
 			setMovement = function( index , val ){
 			  moving[ index ] = val;
+			},
+			hurt = function( howmuch ){
+			  health -= howmuch;
+			  if( health < 1 ){
+				die();
+			  }
+			  Renderer.updateHUD();
+			},
+			heal = function( howmuch ){
+			  health += howmuch;
+			  if( health > 100 ){
+				health = 100;
+			  }
+			  Renderer.updateHUD();
+			},
+			getHealth = function(){
+			  return health;
+			},
+			die = function(){
+			  Game.stop();
+			  alert( 'You were eaten by a grue' );
 			};
 
 		return {
@@ -1039,7 +1087,11 @@ console.log(a,b,c);
 		  setMovement:setMovement,
 		  getTile:function(){return intile;},
 		  getOffset:function(){return pixel_offset;},
-		  getFacing:function(){return facing;}
+		  getFacing:function(){return facing;},
+		  hurt:hurt,
+		  heal:heal,
+		  die:die,
+		  getHealth:getHealth
 
 		};
 
@@ -1100,7 +1152,7 @@ console.log(a,b,c);
 		var	frametime = 40,
 			t,
 			stopped = false,
-			mapnum = 3,
+			mapnum = 1,
 			tick = function(){
 			  //Renderer.clear();
 			  Player.move();
@@ -1120,6 +1172,8 @@ console.log(a,b,c);
 				  // clear map
 				  Renderer.init();
 				  Renderer.clear();
+				  // draw HUD
+				  Renderer.updateHUD();
 				  // move player to entrance
 				  Player.moveToEntrance();
 				  // set render list to be whole map
