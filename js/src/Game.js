@@ -140,6 +140,9 @@ console.log(a,b,c);
 		moving: [0,0],
 		facing: 'down',
 		movementSpeed: 3,
+		weaponSpeed: 5,
+		currentSwing: 0,
+		pointsWorth: 5,
 		type: 1,
 		damage: 3,
 		getNewOffsetForMovement: function( moveVect ){
@@ -169,6 +172,9 @@ console.log(a,b,c);
 		},
 		getOffset: function(){
 		  return this.offset;
+		},
+		getPointValue: function(){
+		  return this.pointsWorth;
 		},
 		getTilesToRedraw: function(){
 		  // tiles to redraw are the current position and all surrounding tiles
@@ -205,19 +211,19 @@ console.log(a,b,c);
 			  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY },
 			  tile = Stage.getTileAt( newTilePos );
 		  // if tile in vectorToPlayer direction is a floor tile, set it and return
-		  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' ){
+		  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' && newTilePos.x !== playerPos.x && newTilePos.y !== playerPos.y ){
 			this.moving = vectorToPlayer;
 		  }else{
 			// else if tile in x is ok
 			newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y };
 			tile = Stage.getTileAt( newTilePos );
-			if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' ){
+			if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' && newTilePos.x !== playerPos.x && newTilePos.y !== playerPos.y ){
 			  this.moving = vectX;
 			}else{
 			  // else if tile in y is ok
 			  newTilePos = { x: this.coords.x , y: this.coords.y + newOffset.tileY };
 			  tile = Stage.getTileAt( newTilePos );
-			  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' ){
+			  if( tile.substr(0,1) === 'f' || tile.substr(0,1) === 's' && newTilePos.x !== playerPos.x && newTilePos.y !== playerPos.y ){
 				this.moving = vectY;
 			  }else{
 				this.moving = [ 0 , 0 ];
@@ -257,7 +263,12 @@ console.log(a,b,c);
 			case 1:  this.facing = 'down'; break;
 		  }
 		  if( playerPos.x === this.coords.x && playerPos.y === this.coords.y ){
-			Player.hurt( this.damage );
+			this.currentSwing++;
+			if( this.currentSwing === 1 ){
+			  Player.hurt( this.damage );
+			}else if( this.currentSwing > this.weaponSpeed ){
+			  this.currentSwing = 0;
+			}
 		  }
 		  // get indexes of tiles to redraw
 		  tilesToUpdate = this.getTilesToRedraw();
@@ -271,14 +282,20 @@ console.log(a,b,c);
 			case '0':
 			  this.movementSpeed = 3;
 			  this.damage = 3;
+			  this.pointsWorth = 5;
+			  this.weaponSpeed = 5;
 			  break;
 			case '1':
 			  this.movementSpeed = 5;
-			  this.damage = 5;
+			  this.damage = 6;
+			  this.pointsWorth = 10;
+			  this.weaponSpeed = 6;
 			  break;
 			default:
 			  this.movementSpeed = 3;
 			  this.damage = 3;
+			  this.pointsWorth = 5;
+			  this.weaponSpeed = 5;
 			  break;
 		  }
 		},
@@ -358,12 +375,18 @@ console.log(a,b,c);
 		 */
 		killMonster: function( m ){
 		  // remove from local array
-		  this.monsters = _( this.monsters ).without( m );
-		  // set tiles for update
-		  var update = m.getTilesToRedraw();
-		  _( update ).each( function( tile ){
-			Renderer.queueForUpdate( tile );
-		  });
+		  var newMonsterList = _( this.monsters ).without( m );
+		  if( !_.isEqual( this.monsters , newMonsterList ) ){
+			this.monsters = newMonsterList;
+			// set tiles for update
+			var update = m.getTilesToRedraw();
+			_( update ).each( function( tile ){
+			  Renderer.queueForUpdate( tile );
+			});
+			// give Player points
+			Player.givePoints( m.getPointValue() );
+			Renderer.updateHUD();
+		  }
 		},
 		startSpawn: function(){
 		  this.autoSpawn = true;
@@ -613,6 +636,7 @@ console.log(a,b,c);
 			updateHUD = function(){
 			  // todo don't use dom elements
 			  Stage.updateHealth( Player.getHealth() );
+			  Stage.updateScore( Player.getScore() );
 			};
 
 		return {
@@ -647,8 +671,11 @@ console.log(a,b,c);
 			injectHUD = function(){
 			  var $_hud = jQuery( '<div></div>' );
 			  $_health = jQuery( '<span></span>' );
+			  $_score = jQuery( '<span></span>' );
 			  $_hud.append( 'Health: ' );
 			  $_hud.append( $_health );
+			  $_hud.append( 'Score: ' );
+			  $_hud.append( $_score );
 			  jQuery( '.game' ).append( $_hud );
 			},
 			load = function( lnum , cb ){
@@ -698,6 +725,9 @@ console.log(a,b,c);
 				color: (h<25)?'#f00':'#000'
 			  })
 			  $_health.text( h );
+			},
+			updateScore = function( s ){
+			  $_score.text( s );
 			};
 
 		return {
@@ -706,10 +736,11 @@ console.log(a,b,c);
 		  getTileAt:getTileAt,
 		  getCoordsFor:getCoordsFor,
 		  getIndexFor:getIndexFor,
+		  updateHealth:updateHealth,
+		  updateScore:updateScore,
 		  getMap:function(){return map;},
 		  getContext:function(){return ctx;},
-		  getCanvas:function(){return $_canvas;},
-		  updateHealth:updateHealth
+		  getCanvas:function(){return $_canvas;}
 		};
 
 	  })(),
@@ -928,6 +959,7 @@ console.log(a,b,c);
 			movementSpeed = 5,
 			canfire = true,
 			health = 100,
+			score = 0,
 			/**
 			 * checkMovement
 			 * checks local moving vector is valid and sets closest possible if not
@@ -1073,8 +1105,14 @@ console.log(a,b,c);
 			  }
 			  Renderer.updateHUD();
 			},
+			givePoints = function( numpoints ){
+			  score += numpoints;
+			},
 			getHealth = function(){
 			  return health;
+			},
+			getScore = function(){
+			  return score;
 			},
 			die = function(){
 			  Game.stop();
@@ -1094,7 +1132,9 @@ console.log(a,b,c);
 		  hurt:hurt,
 		  heal:heal,
 		  die:die,
-		  getHealth:getHealth
+		  givePoints:givePoints,
+		  getHealth:getHealth,
+		  getScore:getScore
 
 		};
 
@@ -1155,7 +1195,7 @@ console.log(a,b,c);
 		var	frametime = 40,
 			t,
 			stopped = false,
-			mapnum = 1,
+			mapnum = 4,
 			tick = function(){
 			  //Renderer.clear();
 			  Player.move();
