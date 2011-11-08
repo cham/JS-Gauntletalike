@@ -1,0 +1,27 @@
+{
+    "mapdata" : [
+                 "wq","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","wj","wi","wj","wi","wj","wi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr",
+                 "wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fj","fi","fi","fi","fi","fe3","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo",
+                 "wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fj","fi","fi","fi","fi","fi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo",
+                 "wo","fj","fi","fi","fi","fi","fi","fi","d0","fi","wo","fj","fi","fl","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","d1","fk","wo",
+                 "wo","fj","fi","fi","fi","fi","fi","fi","fi","d0","wo","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","s2","fi","fi","fi","fi","fk","wo",
+                 "wo","fj","fi","fi","fi","fi","wo","fl","fi","fi","wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fi","fi","fi","fi","fi","fk","wo",
+                 "wo","fj","fi","s2","fi","fk","wo","fj","fi","fi","wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fi","fl","wo","fi","fi","fk","wo",
+                 "wo","fj","fi","fi","fi","fk","wo","fj","fi","fi","wo","d1","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","wo","fi","fi","wo","fi","fi","fk","wo",
+                 "wo","fj","fl","fi","fi","fk","wo","fj","fi","s2","wo","fi","fi","wo","fi","fl","fi","fi","fi","fi","fi","s2","fi","wo","wm","wm","wp","fi","fi","fk","wo",
+                 "wo","fj","fi","fi","fi","fk","wo","fj","fi","fi","wo","fi","fi","wo","fi","fi","fi","d0","d0","fi","fi","fi","fi","wo","wi","wj","wi","fi","fi","fk","wo",
+                 "wo","fj","wl","wm","wm","wm","wo","fj","d0","fi","wo","fi","fi","wo","fi","fi","fi","fi","fi","fi","fi","fi","fi","wo","wj","wi","wj","fi","fi","fk","wo",
+                 "wo","fj","wj","wi","wj","wi","wo","fj","fi","wl","wp","fl","fi","wo","fi","fi","wl","wm","wm","wm","wm","wm","wm","wp","d1","fi","fi","fi","fi","fk","wo",
+                 "wo","fj","wi","wj","wi","wj","wo","fj","fi","wi","wj","fi","fi","wo","fi","fi","wj","wi","wj","wi","wj","wi","wj","wi","fi","fi","fi","d0","fi","fk","wo",
+                 "wo","fj","fi","fi","d1","fk","wo","fj","fi","wj","wi","fi","fi","wo","fi","fi","wi","wj","wi","wj","wi","wj","wi","wj","fi","fi","fl","fi","fi","fk","wo",
+                 "wo","fj","fi","fl","fi","fk","wo","fj","fi","fi","fi","fi","fi","wo","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fk","wo",
+                 "wo","wm","wk","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","fi","fi","fl","fi","fi","fi","fi","fi","fi","fi","fi","fk","wo",
+                 "wo","wj","wi","fj","fk","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fj","fi","fi","fi","d0","fi","d0","fi","fi","fi","fi","fk","wo",
+                 "wo","wi","wj","fj","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fj","fi","s2","fi","fi","fi","fi","fi","fi","s2","fi","fk","wo",
+                 "wo","fj","s2","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fk","wo","fj","fi","fi","fi","fi","fl","fi","fi","fi","fi","fi","fk","wo",
+                 "wn","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wk","fi","fi","fk","wn","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wp",
+                 "wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fi","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj",
+                 "wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","fj","fi","fx2","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi"
+                ] ,
+    "mapdims" : { "x":31,"y":22 }
+}

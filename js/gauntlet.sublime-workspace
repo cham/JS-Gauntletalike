@@ -1,0 +1,1199 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "Searching 22 files for \"hitMonster\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Missile.js:\n   28  \n   29  			/**\n   30: 			 * hitMonster\n   31  			 * returns the Monster if the missile has hit a monster, otherwise false\n   32  			 */\n   33: 			module.hitMonster = function(){\n   34  			  var monsters = Gauntlet.MonsterSpawnerCollection.getAllMonsterStates() , self = this ,\n   35  				  collisions = [];\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MissileLauncher.js:\n   32  					  collisions = [];\n   33  				  _( missiles ).each( function( missile ){\n   34: 					collisions = missile.hitMonster();\n   35  					if( missile.hitWall() ){\n   36  					  // redraw area around where the missile died\n\n3 matches across 2 files\n\n\nSearching 25 files for \"missilestates\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Tileset.js:\n   42  				  playerstates = data.playerstates;\n   43  				  monsterstates = data.monsterstates;\n   44: 				  missilestates = data.missilestates;\n   45  				  bossstates = data.bossstates;\n   46  				  // load images, onload create canvas elements and execute cb when both done\n   ..\n   80  				return { canvas: charactersprite , x: monsterstates[ subindex ][ facing ][ salt ].x  , y: monsterstates[ subindex ][ facing ][ salt ].y , tiledims: pixel_dims };\n   81  			  }else if( tiletype === 'missile' ){\n   82: 				return { canvas: charactersprite , x: missilestates[ facing ][ salt ].x  , y: missilestates[ facing ][ salt ].y , tiledims: pixel_dims };\n   83  			  }else if( tiletype === 'boss' ){\n   84  			  	return { canvas: mapsprite , x: bossstates[ facing ][ 'tile_' + subindex ][ salt ].x  , y: bossstates[ facing ][ 'tile_' + subindex ][ salt ].y , tiledims: pixel_dims };\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\maps\\tilesets\\shiningforce.json:\n  106        }\n  107      ],\n  108:     \"missilestates\": {\n  109        \"up\":    [ { \"x\": 96 , \"y\": 168 } , { \"x\": 120, \"y\": 168 } ],\n  110        \"down\":  [ { \"x\": 0  , \"y\": 168 } , { \"x\": 24 , \"y\": 168 } ],\n\n5 matches across 2 files\n\n\nSearching 25 files for \"hitMonster\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Missile.js:\n   29  \n   30  			/**\n   31: 			 * hitMonster\n   32  			 * returns the Monster if the missile has hit a monster, otherwise false\n   33  			 */\n   34: 			module.hitMonster = function(){\n   35  			  var monsters = Gauntlet.MonsterSpawnerCollection.getAllMonsterStates() , self = this ,\n   36  				  collisions = [];\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MissileLauncher.js:\n   32  					  collisions = [];\n   33  				  _( missiles ).each( function( missile ){\n   34: 					collisions = missile.hitMonster();\n   35  					if( missile.hitWall() ){\n   36  					  // redraw area around where the missile died\n\n3 matches across 2 files\n\n\nSearching 25 files for \"getAllSpawners\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Missile.js:\n   53  			 */\n   54  			module.hitSpawner = function(){\n   55: 				var spawners = Gauntlet.MonsterSpawnerCollection.getAllSpawners() , spX , spY ,\n   56  					collisions = [] , \n   57  					self = this ,\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MonsterSpawnerCollection.js:\n  115  					spawners = _( spawners ).without( s );\n  116  				},\n  117: 				getAllSpawners = function(){\n  118  					return spawners;\n  119  				};\n  ...\n  128  			  isTileFree:isTileFree,\n  129  			  killSpawner:killSpawner,\n  130: 			  getAllSpawners:getAllSpawners\n  131  			};\n  132  		})();\n\n4 matches across 2 files\n\n\nSearching 25 files for \"hitSpawner\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Missile.js:\n   49  \n   50  			/**\n   51: 			 * hitSpawner\n   52  			 * returns an array of spawners the missile has hit\n   53  			 */\n   54: 			module.hitSpawner = function(){\n   55  				var spawners = Gauntlet.MonsterSpawnerCollection.getAllSpawners() , spX , spY ,\n   56  					collisions = [] , \n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MissileLauncher.js:\n   35  				  _( missiles ).each( function( missile ){\n   36  					mCollisions = missile.hitMonster();\n   37: 					sCollisions = missile.hitSpawner();\n   38  					if( missile.hitWall() ){\n   39  					  // redraw area around where the missile died\n\n3 matches across 2 files\n\n\nSearching 25 files for \"hitSpawner\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Missile.js:\n   49  \n   50  			/**\n   51: 			 * hitSpawner\n   52  			 * returns an array of spawners the missile has hit\n   53  			 */\n   54: 			module.hitSpawner = function(){\n   55  				var spawners = Gauntlet.MonsterSpawnerCollection.getAllSpawners() , spX , spY ,\n   56  					collisions = [] , \n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MissileLauncher.js:\n   35  				  _( missiles ).each( function( missile ){\n   36  					mCollisions = missile.hitMonster();\n   37: 					sCollisions = missile.hitSpawner();\n   38  					if( missile.hitWall() ){\n   39  					  // redraw area around where the missile died\n\n3 matches across 2 files\n\n\nSearching 25 files for \"console\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MapProvider.js:\n   21  					  cb( data );\n   22  					},\n   23: 					error: function(a,b,c){ console.log(a,b,c); }\n   24  				  } );\n   25  				};\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MonsterSpawnerCollection.js:\n  113  				 */\n  114  				killSpawner = function( s ){\n  115: console.log( s );\n  116  					spawners = _( spawners ).without( s );\n  117  				},\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Renderer.js:\n   38  					ctx.drawImage( spriteInfo.canvas, spriteInfo.x, spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox  + offset.x , oy  + offset.y , dx - ox , dy - oy );\n   39  				  }catch( e ){\n   40: 					console.log( e , spriteInfo );\n   41  				  }\n   42  				},\n\n3 matches across 3 files\n\n\nSearching 25 files for \"givePoints\" (case sensitive)\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\MonsterSpawner.js:\n   80  				});\n   81  				// give Player points\n   82: 				Gauntlet.Player.givePoints( m.getPointValue() );\n   83  				Gauntlet.Renderer.updateHUD();\n   84  			  }\n\nC:\\xampp\\xampp\\htdocs\\games\\gauntlet\\js\\src\\Player.js:\n  110  			};\n  111  \n  112: 			module.givePoints = function( numpoints ){\n  113  			  this.score += numpoints;\n  114  			};\n\n2 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 6286,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/gauntlet.html",
+			"settings":
+			{
+				"buffer_size": 2201,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/1.json",
+			"settings":
+			{
+				"buffer_size": 3881,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/2.json",
+			"settings":
+			{
+				"buffer_size": 3881,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/3.json",
+			"settings":
+			{
+				"buffer_size": 3881,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/4.json",
+			"settings":
+			{
+				"buffer_size": 3881,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/5.json",
+			"settings":
+			{
+				"buffer_size": 3883,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/6.json",
+			"settings":
+			{
+				"buffer_size": 3883,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/7.json",
+			"settings":
+			{
+				"buffer_size": 3938,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/tilesets/shiningforce.json",
+			"settings":
+			{
+				"buffer_size": 5249,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Game.js",
+			"settings":
+			{
+				"buffer_size": 4590,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Scene.js",
+			"settings":
+			{
+				"buffer_size": 722,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Boss.js",
+			"settings":
+			{
+				"buffer_size": 3915,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Controller.js",
+			"settings":
+			{
+				"buffer_size": 1492,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/HomingMissile.js",
+			"settings":
+			{
+				"buffer_size": 1731,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Monster.js",
+			"settings":
+			{
+				"buffer_size": 3599,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Missile.js",
+			"settings":
+			{
+				"buffer_size": 2071,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Player.js",
+			"settings":
+			{
+				"buffer_size": 5656,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/MoveableAgent.js",
+			"settings":
+			{
+				"buffer_size": 4783,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/MissileLauncher.js",
+			"settings":
+			{
+				"buffer_size": 2861,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Stage.js",
+			"settings":
+			{
+				"buffer_size": 3705,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Renderer.js",
+			"settings":
+			{
+				"buffer_size": 5217,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/MonsterSpawnerCollection.js",
+			"settings":
+			{
+				"buffer_size": 3648,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/MonsterSpawner.js",
+			"settings":
+			{
+				"buffer_size": 4054,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/MapProvider.js",
+			"settings":
+			{
+				"buffer_size": 645,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Tileset.js",
+			"settings":
+			{
+				"buffer_size": 3800,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 115.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/xampp/xampp/htdocs/games/gauntlet/js/gauntlet.sublime-project",
+		"/C/xampp/xampp/htdocs/games/gauntlet/js/src/Game_collated.js"
+	],
+	"find":
+	{
+		"height": 32.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"canfire",
+			"givePoints",
+			"makeSpawner",
+			"console",
+			"hitSpawner",
+			"getAllSpawners",
+			"hitMonster",
+			"missilestates",
+			"hitMonster",
+			"fx",
+			"movementSpeed",
+			"pixel_offset",
+			"intile",
+			"movementSpeed",
+			"Wj",
+			"wj",
+			"wi",
+			"\n\n",
+			"\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"speed",
+			"offset",
+			"coords",
+			"speed",
+			"wj",
+			"wi",
+			"Wj"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 17,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"settings":
+					{
+						"buffer_size": 6286,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										145,
+										155
+									],
+									[
+										270,
+										280
+									],
+									[
+										607,
+										617
+									],
+									[
+										967,
+										980
+									],
+									[
+										988,
+										1001
+									],
+									[
+										1411,
+										1424
+									],
+									[
+										1451,
+										1464
+									],
+									[
+										1851,
+										1864
+									],
+									[
+										2192,
+										2202
+									],
+									[
+										2317,
+										2327
+									],
+									[
+										2654,
+										2664
+									],
+									[
+										3022,
+										3036
+									],
+									[
+										3260,
+										3274
+									],
+									[
+										3422,
+										3436
+									],
+									[
+										3437,
+										3451
+									],
+									[
+										3653,
+										3663
+									],
+									[
+										3757,
+										3767
+									],
+									[
+										4105,
+										4115
+									],
+									[
+										4388,
+										4398
+									],
+									[
+										4492,
+										4502
+									],
+									[
+										4840,
+										4850
+									],
+									[
+										5166,
+										5173
+									],
+									[
+										5356,
+										5363
+									],
+									[
+										5711,
+										5718
+									],
+									[
+										5991,
+										6001
+									],
+									[
+										6174,
+										6184
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								5995,
+								5995
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 8,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2282.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/gauntlet.html",
+					"settings":
+					{
+						"buffer_size": 2201,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2043,
+								2043
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/1.json",
+					"settings":
+					{
+						"buffer_size": 3881,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3876,
+								3875
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/2.json",
+					"settings":
+					{
+						"buffer_size": 3881,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3876,
+								3876
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/3.json",
+					"settings":
+					{
+						"buffer_size": 3881,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3881,
+								3881
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/4.json",
+					"settings":
+					{
+						"buffer_size": 3881,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1336,
+								1336
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/5.json",
+					"settings":
+					{
+						"buffer_size": 3883,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1036,
+								1036
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/6.json",
+					"settings":
+					{
+						"buffer_size": 3883,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1092,
+								1094
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/7.json",
+					"settings":
+					{
+						"buffer_size": 3938,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1815,
+								1815
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 8,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/xampp/xampp/htdocs/games/gauntlet/maps/tilesets/shiningforce.json",
+					"settings":
+					{
+						"buffer_size": 5249,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4658,
+								4658
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1050.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/Game.js",
+					"settings":
+					{
+						"buffer_size": 4590,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								268,
+								268
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/Scene.js",
+					"settings":
+					{
+						"buffer_size": 722,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								563,
+								563
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/Boss.js",
+					"settings":
+					{
+						"buffer_size": 3915,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3836,
+								3836
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 504.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/Controller.js",
+					"settings":
+					{
+						"buffer_size": 1492,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1309,
+								1309
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "src/HomingMissile.js",
+					"settings":
+					{
+						"buffer_size": 1731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								295,
+								302
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "src/Monster.js",
+					"settings":
+					{
+						"buffer_size": 3599,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3347,
+								3347
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "src/Missile.js",
+					"settings":
+					{
+						"buffer_size": 2071,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1247,
+								1247
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 294.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "src/Player.js",
+					"settings":
+					{
+						"buffer_size": 5656,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3680,
+								3680
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 840.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "src/MoveableAgent.js",
+					"settings":
+					{
+						"buffer_size": 4783,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4583,
+								4583
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1680.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "src/MissileLauncher.js",
+					"settings":
+					{
+						"buffer_size": 2861,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1442,
+								1443
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 168.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/Stage.js",
+					"settings":
+					{
+						"buffer_size": 3705,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3458,
+								3458
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1176.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "src/Renderer.js",
+					"settings":
+					{
+						"buffer_size": 5217,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5085,
+								5094
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1621.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "src/MonsterSpawnerCollection.js",
+					"settings":
+					{
+						"buffer_size": 3648,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								886,
+								886
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 42.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "src/MonsterSpawner.js",
+					"settings":
+					{
+						"buffer_size": 4054,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3437,
+								3437
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1050.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "src/MapProvider.js",
+					"settings":
+					{
+						"buffer_size": 645,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								445,
+								445
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "src/Tileset.js",
+					"settings":
+					{
+						"buffer_size": 3800,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3654,
+								3675
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 588.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 60.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
