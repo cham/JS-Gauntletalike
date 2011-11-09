@@ -30,7 +30,7 @@
 				},
 				injectHUD = function(){
 				  var $_hud = jQuery( '<div></div>' );
-				  $_health = jQuery( '<span></span>' );
+				  $_health = jQuery( '<div class="healthbar"><div></div></div>' );
 				  $_score = jQuery( '<span></span>' );
 				  $_lives = jQuery( '<span></span>' );
 				  $_multiplier = jQuery( '<span></span>' );
@@ -42,7 +42,7 @@
 				  $_hud.append( $_score );
 				  $_hud.append( 'Lives: ' );
 				  $_hud.append( $_lives );;
-				  jQuery( '.game' ).append( $_hud );
+				  jQuery( '.hud' ).append( $_hud );
 				},
 				load = function( lnum , cb ){
 				  // load the level as JSON
@@ -57,8 +57,6 @@
 					makeCanvas( stageDims.width , stageDims.height );
 					// pass to dom
 					injectCanvas();
-					// inject HUD
-					injectHUD();
 					// run callback if passed
 					if( cb ){ cb(); }
 				  });
@@ -93,10 +91,7 @@
 				  return ( ind + coords.x );
 				},
 				updateHealth = function( h ){
-				  $_health.css({
-					color: (h<25)?'#f00':'#000'
-				  })
-				  $_health.text( h );
+				  $_health.find( 'div' ).css( { width: h } );
 				},
 				updateScore = function( s ){
 				  $_score.text( s );
@@ -114,6 +109,7 @@
 				};
 
 			return {
+			  injectHUD:injectHUD,
 			  load: load,
 			  getEntrance: getEntrance,
 			  getTileAt:getTileAt,

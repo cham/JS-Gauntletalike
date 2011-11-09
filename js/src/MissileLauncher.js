@@ -11,6 +11,7 @@
 		MissileLauncher = (function(){
 			var missiles = [],
 				maxMissiles = 99 ,
+				missileType = 1,
 				/**
 				 * fireMissile
 				 * fires a new Missile object
@@ -19,6 +20,7 @@
 				fireMissile = function( coords , offset , movement ){
 				  if( missiles.length >= maxMissiles ){ return; }
 				  var missile = Gauntlet.Missile.instance();
+				  missile.setType( Gauntlet.Player.getWeaponType() );
 				  missile.setPosition( coords , offset );
 				  missile.setMovement( movement );
 				  missiles.push( missile );
@@ -53,6 +55,13 @@
 					  	if( c.monster.health < 1 ){
 							Gauntlet.MonsterSpawnerCollection.killMonster( c.monster );
 						}
+					  });
+					}else if( missile.hitBoss() ){
+						Gauntlet.Boss.hurt( Gauntlet.Player.getDamage() );
+					}else if( missile.timeOut() ){
+					  // redraw area around where the missile died
+					  _( missile.getTilesToRedraw() ).each( function( tile ){
+						Gauntlet.Renderer.queueForUpdate( tile );
 					  });
 					}else{
 					  // else move and push to not dead stack
@@ -90,9 +99,23 @@
 						});
 					});
 					missiles = [];
+				},
+				
+				/**
+				 * killMissile
+				 * deletes ths specified missile from local array
+				 */
+				killMissile = function( m ){
+					missiles = _( missiles ).without( m );
+					// redraw area around where the missile died
+					_( m.getTilesToRedraw() ).each( function( tile ){
+						Gauntlet.Renderer.queueForUpdate( tile );
+					});
 				};
 
+
 			return {
+			  killMissile:killMissile,
 			  killAllMissiles:killAllMissiles,
 			  fireMissile: fireMissile,
 			  moveMissiles: moveMissiles,

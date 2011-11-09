@@ -10,7 +10,7 @@
 
 		Game = (function(){
 
-			var	frametime = 40,
+			var	frametime = 35,
 				t,
 				stopped = false,
 				mapnum = 1 ,
@@ -31,11 +31,11 @@
 				  if( !stopped ){
 					t = window.setTimeout( tick , frametime );
 				  }
-				}
+				},
 				start = function(){
 					// load Tileset images
 					Gauntlet.Tileset.load( function(){
-						// once loaded, load the stage data
+						// once loaded, laoad the stage data
 						Gauntlet.Stage.load( mapnum , function(){
 							// clear map
 							Gauntlet.Renderer.init();
@@ -91,6 +91,10 @@
 				  if( mapnum === 5 || mapnum === 7 ){
 					nextTheme();
 				  }
+				  if( mapnum === 8 ){
+				  	nextTheme();
+				  	Gauntlet.Player.upgradeWeapon();
+				  }
 				  start();
 				},
 				restartLevel = function(){
@@ -112,7 +116,7 @@
 				 * plays the intro theme and restored themes array
 				 */
 				restoreThemes = function(){
-					themes = [ 'VYcCSVsISXo' , 'ULXnfaQg-ZI' , 'RzkIiflWggU' , '8lhpWOfwRyY' ];
+					themes = [ 'VYcCSVsISXo' , 'ULXnfaQg-ZI' , 'RzkIiflWggU' , '8lhpWOfwRyY' , 'NYpf6lfr_Is' ];
 					nextTheme();
 				},
 				/**
@@ -140,6 +144,11 @@
 					Gauntlet.MissileLauncher.killAllMissiles();
 					Gauntlet.Boss.killAllMissiles();
 					Gauntlet.Boss.sleep();
+				},
+				startNewGame = function(){
+					// draw HUD
+					Gauntlet.Stage.injectHUD();
+					start();
 				};
 
 			return {
@@ -149,7 +158,8 @@
 			  restartLevel:restartLevel,
 			  onlyDrawUpdated:onlyDrawUpdated,
 			  gameInProgress:gameInProgress,
-			  end:end
+			  end:end,
+			  startNewGame:startNewGame
 			};
 
 		})();

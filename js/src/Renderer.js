@@ -66,7 +66,7 @@
 				  _( missileStates ).each( function( mState ){
 					ox = mState.coords.x * tx ,
 					oy = mState.coords.y * ty;
-					drawTile( ox , oy , ox + tx , oy + ty , 'missile' , +( playerSwitch > 3 ) , mState.facing , mState.offset , mState.type );
+					drawTile( ox , oy , ox + tx , oy + ty , 'missile' , +( playerSwitch > 3 ) , mState.facing , mState.offset , mState.type-1 );
 				  } );
 				},
 				drawBossMissiles = function(){

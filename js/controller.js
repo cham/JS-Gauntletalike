@@ -1,1 +1,1 @@
-Gauntlet.Game.start();
+Gauntlet.Game.startNewGame();

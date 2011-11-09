@@ -99,6 +99,9 @@
 					// give Player points
 					Gauntlet.Player.givePoints( m.getPointValue() );
 				});
+				_( this.getTilesToRedraw() ).each( function( tileIndex ){
+					Gauntlet.Renderer.queueForUpdate( tileIndex );
+				});
 			},
 			startSpawn: function(){
 			  this.autoSpawn = true;
@@ -108,6 +111,31 @@
 			  this.stopped = true;
 			  this.autoSpawn = false;
 			  window.clearTimeout( this.t );
+			},
+			/**
+			 * getTilesToRedraw
+			 * returns an array of tile indexes to redraw on the tile the MonsterSpawner is on and those around it
+			 */
+			getTilesToRedraw: function(){
+			  // tiles to redraw are the current position and all surrounding tiles
+			  var currentIndex = Gauntlet.Stage.getIndexFor( this.coords ) ,
+				  map = Gauntlet.Stage.getMap() ,
+				  maxIndex = map.mapdata.length ,
+				  mapDims = map.mapdims , mw = mapDims.x , mh = mapDims.y ,
+				  candidatePoints = [
+					currentIndex - ( mw - 1 ) ,
+					currentIndex - mw ,
+					currentIndex - ( mw + 1 ) ,
+					currentIndex - 1 ,
+					currentIndex ,
+					currentIndex + 1 ,
+					currentIndex + ( mw - 1 ) ,
+					currentIndex + mw ,
+					currentIndex + ( mw + 1 )
+				  ];
+			  return _.select( candidatePoints , function( index ){
+				return index > -1 && index < maxIndex;
+			  } );
 			},
 			/**
 			 * sets

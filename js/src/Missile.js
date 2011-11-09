@@ -13,7 +13,16 @@
 			// set speed
 			module.speed = 10;
 			module.type = 0; // 0 is the default player missile
+			module.time = 16;
 
+			/**
+			 * timeOut
+			 * returns true if the Missile has timed out
+			 */
+			module.timeOut = function(){
+				this.time--;
+				return this.time < 0;
+			};
 			/**
 			 * hitWall
 			 * returns true if the Missile has hit a wall, otherwise false
@@ -45,6 +54,24 @@
 				}
 			  });
 			  return collisions;
+			};
+
+			/**
+			 * hitMonster
+			 * returns true if it hits the Boss
+			 */
+			module.hitBoss = function(){
+				if( !Gauntlet.Boss.isActive() ){ return false; }
+				var bossPos = Gauntlet.Boss.getPosition() ,
+					minX = bossPos.x , maxX = bossPos.x + 1,
+					minY = bossPos.y+1 , maxY = bossPos.y + 1,
+					sX = this.coords.x ,
+					sY = this.coords.y ,
+					hitBoss = false;
+				if( minX <= sX && maxX >= sX && minY <= sY && minY >= sY ){
+					return true;
+				}
+				return false;
 			};
 
 			/**

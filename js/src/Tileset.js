@@ -83,8 +83,10 @@
 				return { canvas: charactersprite , x: missilestates[ subindex ][ facing ][ salt ].x  , y: missilestates[ subindex ][ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else if( tiletype === 'boss' ){
 			  	return { canvas: mapsprite , x: bossstates[ facing ][ 'tile_' + subindex ][ salt ].x  , y: bossstates[ facing ][ 'tile_' + subindex ][ salt ].y , tiledims: pixel_dims };
-			  }else{
+			  }else if( tiletype ){
 				return { canvas: mapsprite , x: tilepositions[ tiletype ].x , y: tilepositions[ tiletype ].y , tiledims: pixel_dims };
+			  }else{
+			  	return { canvas: mapsprite , x: 0 , y: 0 , tiledims: pixel_dims };
 			  }
 			};
 

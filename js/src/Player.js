@@ -21,9 +21,10 @@
 			module.multiCount = 0;
 			module.multiCountFrom = 20;
 			module.firing = false;
-			module.weaponSpeed = 6;
+			module.weaponSpeed = 5;
 			module.currentSwing = 0;
 			module.weaponType = 1;
+			module.damage = 1;
 
 			module.beforeMoving = function(){
 				// if firing then fire
@@ -169,6 +170,10 @@
 			  return this.lives;
 			};
 
+			module.getDamage = function(){
+				return this.damage;
+			};
+
 			module.die = function(){
 				this.lives--;
 				if( this.lives < 0 ){
@@ -195,6 +200,24 @@
 			module.fireOff = function(){
 				this.firing = false;
 				this.currentSwing = 0;
+			};
+
+			module.upgradeWeapon = function(){
+				this.weaponType++;
+				switch( this.weaponType ){
+					case 2:
+						this.weaponSpeed = 3;
+						this.damage = 2;
+						Gauntlet.Missile.time = 30;
+						break;
+					default:
+						break;
+				}
+				module.currentSwing = 0;
+			};
+
+			module.getWeaponType = function(){
+				return this.weaponType;
 			};
 
 			return module;

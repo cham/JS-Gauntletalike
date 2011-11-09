@@ -18,6 +18,7 @@
 				missiles = [],
 				maxMissiles = 10 ,
 				missileSwitch = 0 ,
+				health = 20 ,
 				/**
 				 * makeBoss
 				 * creates a new boss at the specified location of the specified type
@@ -35,6 +36,16 @@
 				 */
 				isActive = function(){
 					return active;
+				},
+				/**
+				 * hurt
+				 * hurt the current Boss
+				 */
+				hurt = function( h ){
+					health -= h;
+					if( health < 0 ){
+						die();
+					}
 				},
 				/**
 				 * isActive
@@ -142,6 +153,18 @@
 						});
 					});
 					missiles = [];
+				},
+				/**
+				 * die
+				 * kills the Boss
+				 */
+				die = function(){
+					active = false;
+					killAllMissiles();
+					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( coords ) );
+					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( {x:coords.x,y:coords.y+1} ) );
+					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( {x:coords.x+1,y:coords.y} ) );
+					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( {x:coords.x+1,y:coords.y+1} ) );
 				};
 
 
@@ -155,7 +178,8 @@
 				killAllMissiles:killAllMissiles,
 				getPosition:getPosition,
 				getType:getType,
-				sleep:sleep
+				sleep:sleep,
+				hurt:hurt
 			};
 
 		})();

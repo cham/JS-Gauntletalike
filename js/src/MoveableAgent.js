@@ -137,8 +137,8 @@
 				});
 			  }
 			  // check for victory conditions etc
-			  this.afterMoving();
 			  this.checkForSpecialTile( tile );
+			  this.afterMoving();
 			},
 			/**
 			 * checkMovement
