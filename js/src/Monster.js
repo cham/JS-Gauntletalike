@@ -19,6 +19,8 @@
 			module.damage = 3;
 			module.health = 1;
 
+			module.pathfinder = false;
+
 			module.getPointValue = function(){
 			  return this.pointsWorth;
 			};
@@ -31,7 +33,7 @@
 			  var playerPos = Gauntlet.Player.getPosition() ,
 				  xdiff = this.coords.x - playerPos.x ,
 				  ydiff = this.coords.y - playerPos.y ,
-				  vectorToPlayer = [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ] ,
+				  vectorToPlayer = this.pathfinder ? Gauntlet.AStar.getMovementFromTo( {x:this.coords.x,y:this.coords.y} , {x:playerPos.x,y:playerPos.y} ) : ( [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ] ) ,
 				  vectX = [ vectorToPlayer[ 0 ] , 0 ], vectY = [ 0 , vectorToPlayer[ 1 ] ],
 				  newOffset = this.getNewOffset( vectorToPlayer ) ,
 				  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY },
@@ -103,6 +105,14 @@
 				  this.pointsWorth = 7;
 				  this.weaponSpeed = 4;
 				  this.health = 1;
+				  break;
+				case '4':
+				  this.speed = 4;
+				  this.damage = 0;
+				  this.pointsWorth = 50;
+				  this.weaponSpeed = 4;
+				  this.health = 1;
+				  this.pathfinder = true;
 				  break;
 				default:
 				  this.speed = 3;

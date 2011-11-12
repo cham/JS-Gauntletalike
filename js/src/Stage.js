@@ -11,6 +11,7 @@
 		Stage = (function(){
 
 			var	map = {},
+				walkable_map = [],
 				$_canvas = {} ,
 				$_health = {} ,
 				$_lives = {} ,
@@ -44,11 +45,32 @@
 				  $_hud.append( $_lives );;
 				  jQuery( '.hud' ).append( $_hud );
 				},
+				/**
+				 * setWalkableMap
+				 * sets the simplified walkable map for path finding algorithms
+				 */
+				setWalkableMap = function(){
+					// walk map items, new array every map.mapdims.x
+					var row = [] , floor_tiles = ['f' , 's'] , newRowAt = map.mapdims.x;
+					walkable_map = [];
+					_( map.mapdata ).each( function( tiletype , i ){
+						if( i % newRowAt === 0 && row.length ){
+							walkable_map.push( row );
+							row = [];
+						}
+						row.push( floor_tiles.indexOf( tiletype.substr(0,1) ) > -1 ? 'w' : 'u' );
+					});
+					if( row.length ){
+						walkable_map.push( row );
+					}
+				},
 				load = function( lnum , cb ){
 				  // load the level as JSON
 				  Gauntlet.MapProvider.getLevel( lnum , function( mapObj ){
 					// set map
 					map = mapObj;
+					// set walkable_map for astar
+					setWalkableMap();
 					pixelsdims = Gauntlet.Tileset.getPixelDims();
 					// set stge width and height
 					stageDims.width = ( map.mapdims.x * pixelsdims.x );
@@ -121,6 +143,7 @@
 			  updateMultiplier:updateMultiplier,
 			  updateTileAtCoords:updateTileAtCoords,
 			  getMap:function(){return map;},
+			  getWalkableMap:function(){return walkable_map.slice();},
 			  getContext:function(){return ctx;},
 			  getCanvas:function(){return $_canvas;}
 			};

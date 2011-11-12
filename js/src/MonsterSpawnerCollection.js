@@ -10,7 +10,7 @@
 
 		MonsterSpawnerCollection = (function(){
 
-			var	monstersPerSpawner = 6,
+			var	monstersPerSpawner = 5,
 				spawners = [],
 				timers = [],
 				minimumSpawnTime = 2000,
