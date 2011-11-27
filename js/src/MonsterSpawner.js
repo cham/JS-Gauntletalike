@@ -18,6 +18,7 @@
 			limit: 0, // if set then only spawns up to this many monsters
 			monsterType: 0,
 			health: 3,
+			maxMonsters: 4,
 			/**
 			 * spawnNewMonster
 			 * creates a new monster object and runs initialisation methods on it
@@ -161,6 +162,9 @@
 						break;
 				}
 				this.setHealth( h );
+			},
+			setMaxMonsters: function( m ){
+				this.maxMonsters = m;
 			},
 			setMonsters: function( arr ){
 			  this.monsters = arr;

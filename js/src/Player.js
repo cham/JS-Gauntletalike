@@ -98,9 +98,23 @@
 					if( this.weaponType === 2 ){
 						// if not moving in x
 						if( vect[ 0 ] === 0 ){
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+8,y: this.offset.y} , [vect[0],vect[1]] );
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-8,y: this.offset.y} , [vect[0],vect[1]] );
+						}else{
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-8} , [vect[0],vect[1]] );
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+8} , [vect[0],vect[1]] );
+						}
+					}
+					if( this.weaponType === 3 ){
+						// if not moving in x
+						if( vect[ 0 ] === 0 ){
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+8,y: this.offset.y} , [vect[0],vect[1]] );
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-8,y: this.offset.y} , [vect[0],vect[1]] );
 							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [1,vect[1]] );
 							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [-1,vect[1]] );
 						}else if( vect[ 1 ] === 0 ){
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-8} , [vect[0],vect[1]] );
+							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+8} , [vect[0],vect[1]] );
 							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],1] );
 							Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],-1] );
 						}
@@ -182,7 +196,7 @@
 					return;
 				}
 				// restart the level
-				Gauntlet.Player.heal( 200 ); // heal player back to full
+				Gauntlet.Player.heal(200); // heal player back to full
 				Gauntlet.Game.restartLevel();
 			};
 
@@ -206,8 +220,11 @@
 				this.weaponType++;
 				switch( this.weaponType ){
 					case 2:
-						this.weaponSpeed = 3;
-						this.damage = 2;
+						this.weaponSpeed = 5;
+						Gauntlet.Missile.time = 30;
+						break;
+					case 2:
+						this.weaponSpeed = 4;
 						Gauntlet.Missile.time = 30;
 						break;
 					default:

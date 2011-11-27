@@ -128,6 +128,9 @@
 					var index = getIndexFor( coords );
 					map.mapdata[ index ] = changeTo;
 					Gauntlet.Renderer.queueForUpdate( index );
+				},
+				setOpacity = function(v){
+					$_canvas.css({opacity:v});
 				};
 
 			return {
@@ -145,7 +148,8 @@
 			  getMap:function(){return map;},
 			  getWalkableMap:function(){return walkable_map.slice();},
 			  getContext:function(){return ctx;},
-			  getCanvas:function(){return $_canvas;}
+			  getCanvas:function(){return $_canvas;},
+			  setOpacity:setOpacity
 			};
 
 		})();

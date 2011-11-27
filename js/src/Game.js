@@ -14,6 +14,7 @@
 				t,
 				stopped = false,
 				mapnum = 1 ,
+				levelsperworld = 3,
 				onlyDrawUpdated = false,
 				themes ,
 				showIntro = true,
@@ -54,6 +55,8 @@
 								if( !onlyDrawUpdated ){
 									Gauntlet.Renderer.setUpdateList( _.keys( Gauntlet.Stage.getMap().mapdata ) ); // set updatelist to be every tile for first render
 								}
+								// set max monsters per spawner
+								Gauntlet.MonsterSpawnerCollection.setMonstersPerSpawner( Math.ceil( mapnum / levelsperworld ) );
 								// make all monster spawners
 								Gauntlet.MonsterSpawnerCollection.makeAllSpawners();
 								// make all bosses
@@ -72,6 +75,7 @@
 								Gauntlet.Scene.showAndWait( 0 , function(){
 									nextTheme();
 									startTheGame();
+									Gauntlet.Renderer.setLightning(true);
 								});
 								showIntro = false;
 							}else{
@@ -85,15 +89,22 @@
 				  window.clearTimeout( t );
 				},
 				nextLevel = function(){
+				  var nextWorld = ((mapnum % levelsperworld) === 0);
 				  stop();
 				  killAllSprites();
 				  mapnum++;
-				  if( mapnum === 5 || mapnum === 7 ){
-					nextTheme();
+				  if(mapnum === 2){
+				  	Gauntlet.Renderer.setShake(true);
 				  }
-				  if( mapnum === 8 ){
+				  if(mapnum === 4){
+				  	Gauntlet.Renderer.setShake(false);
+					Gauntlet.Renderer.setLightning(false);
+				  }
+				  if(nextWorld){
 				  	nextTheme();
-				  	Gauntlet.Player.upgradeWeapon();
+				  	if( mapnum === 7 || mapnum === 10 ){
+				  	  Gauntlet.Player.upgradeWeapon();
+				    }
 				  }
 				  start();
 				},
@@ -116,7 +127,7 @@
 				 * plays the intro theme and restored themes array
 				 */
 				restoreThemes = function(){
-					themes = [ 'VYcCSVsISXo' , 'ULXnfaQg-ZI' , 'RzkIiflWggU' , '8lhpWOfwRyY' , 'NYpf6lfr_Is' ];
+					themes = [ 'VYcCSVsISXo' , 'vHqjziy-Epc' , 'ULXnfaQg-ZI' , 'RzkIiflWggU' , '8lhpWOfwRyY' , 'NYpf6lfr_Is' ];
 					nextTheme();
 				},
 				/**

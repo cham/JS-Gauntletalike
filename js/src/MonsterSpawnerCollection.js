@@ -26,6 +26,7 @@
 				  doMakeSpawner = function(){
 					var spawner = Gauntlet.MonsterSpawner.instance();
 					spawner.setType( type );
+					spawner.setMaxMonsters( monstersPerSpawner );
 					spawner.setMonsters([]);
 					spawner.setLimit( monstersPerSpawner );
 					spawner.setSpawntime( spawntime );
@@ -116,6 +117,12 @@
 				},
 				getAllSpawners = function(){
 					return spawners;
+				},
+				setMonstersPerSpawner = function( m ){
+					monstersPerSpawner = m;
+				},
+				getMonstersPerSpawner = function( m ){
+					return monstersPerSpawner;
 				};
 
 			return {
@@ -127,7 +134,9 @@
 			  killMonster:killMonster,
 			  isTileFree:isTileFree,
 			  killSpawner:killSpawner,
-			  getAllSpawners:getAllSpawners
+			  getAllSpawners:getAllSpawners,
+			  setMonstersPerSpawner:setMonstersPerSpawner,
+			  getMonstersPerSpawner:getMonstersPerSpawner
 			};
 		})();
 

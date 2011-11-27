@@ -18,6 +18,10 @@
 				updateList = [] ,
 				playerSwitch = 7 ,
 				altSwitch = 10 ,
+				longSwitch = 30 ,
+				shakeEffect = [-1,-2,2,-4,3,-3,2],
+				shakeEffectOn = false,
+				lightningEffectOn = false,
 				tx , ty ,
 				/**
 				 * clear
@@ -115,12 +119,10 @@
 				render = function(){
 				  playerSwitch--;
 				  altSwitch--;
-				  if( playerSwitch < 0 ){
-					playerSwitch = 7;
-				  }
-				  if( altSwitch < 0 ){
-					altSwitch = 10;
-				  }
+				  longSwitch--;
+				  if( playerSwitch < 0 ){ playerSwitch = 7; }
+				  if( altSwitch < 0 ){ altSwitch = 10; }
+				  if( longSwitch < 0 ){ longSwitch = 30; }
 				  if( Gauntlet.Game.onlyDrawUpdated ){
 				  	clear();
 				  }
@@ -136,7 +138,43 @@
 				  drawMissiles();
 				  // draw missiles
 				  drawBossMissiles();
+				  // canvas shake effect
+				  if( shakeEffectOn ){
+				  	shakeCanvas();
+				  }
+				  if( lightningEffectOn ){
+				  	shootLightning();
+				  }
 				  updateList = []; // empty updatelist for next render
+				},
+				/**
+				 * shakeCanvas - shakes the canvas
+				 */
+				shakeCanvas = function(){
+					Gauntlet.Stage.getCanvas().css({'margin-left': shakeEffect[playerSwitch]});
+				},
+				setShake = function(b){
+					shakeEffectOn = b;
+					if( !b ){
+						Gauntlet.Stage.getCanvas().css({'margin-left':0});
+					}
+				},
+				shootLightning = function(){
+					if( longSwitch > 5 ){ return ;}
+					_( ~~(Math.random() * 5) ).times( function(){
+						Gauntlet.Stage.setOpacity(1);
+						window.setTimeout( function(){
+						Gauntlet.Stage.setOpacity(0.5);
+						} , ~~(Math.random * 1000)+100 );
+					});
+				},
+				setLightning = function(b){
+					lightningEffectOn = b;
+					if( !b ){
+						Gauntlet.Stage.setOpacity(1);
+					}else{
+						Gauntlet.Stage.setOpacity(0.5);
+					}
 				},
 				/**
 				 * updateHUD
@@ -157,7 +195,9 @@
 			  queueForUpdate: function( index ){ updateList.push( index ); },
 			  setUpdateList: function( ul ){ updateList = ul; },
 			  updateHUD: updateHUD,
-			  drawScene:drawScene
+			  drawScene:drawScene,
+			  setShake:setShake,
+			  setLightning:setLightning
 			}
 
 		})();

@@ -13,7 +13,7 @@
 			var coords = {x:0,y:0},
 				type = 0,
 				active = false,
-				weaponSpeed = 15,
+				weaponSpeed = 20,
 				currentSwing = 0,
 				missiles = [],
 				maxMissiles = 10 ,
