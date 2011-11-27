@@ -18,7 +18,7 @@
 			pixel_dims ,
 			mapsprite = document.createElement( 'canvas' ) ,
 			charactersprite = document.createElement( 'canvas' ) ,
-			tilepositions = {} , playerstates = {}, monsterstates = {}, bossstates = {}, spawnerfloorstates = {},
+			tilepositions = {} , playerstates = {}, monsterstates = {}, bossstates = {}, spawnerfloorstates = {}, npcstates = {},
 			/**
 			 * load
 			 * load and parse the tileset description, then load the associated sprites, then run the given callback
@@ -43,6 +43,7 @@
 				  monsterstates = data.monsterstates;
 				  missilestates = data.missilestates;
 				  bossstates = data.bossstates;
+				  npcstates = data.npcstates;
 				  spawnerfloorstates = data.spawnerfloorstates;
 				  // load images, onload create canvas elements and execute cb when both done
 				  mapimg.onload = function(){
@@ -83,6 +84,8 @@
 				return { canvas: charactersprite , x: missilestates[ subindex ][ facing ][ salt ].x  , y: missilestates[ subindex ][ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else if( tiletype === 'boss' ){
 			  	return { canvas: mapsprite , x: bossstates[ facing ][ 'tile_' + subindex ][ salt ].x  , y: bossstates[ facing ][ 'tile_' + subindex ][ salt ].y , tiledims: pixel_dims };
+			  }else if( tiletype === 'npc' ){
+			  	return { canvas: charactersprite , x: npcstates[ subindex ][ facing ][ salt ].x  , y: npcstates[ subindex ][ facing ][ salt ].y , tiledims: pixel_dims };
 			  }else if( tiletype ){
 				return { canvas: mapsprite , x: tilepositions[ tiletype ].x , y: tilepositions[ tiletype ].y , tiledims: pixel_dims };
 			  }else{

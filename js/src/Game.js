@@ -22,6 +22,7 @@
 				tick = function(){
 				  //Renderer.clear();
 				  Gauntlet.Player.move();
+				  Gauntlet.NPCCollection.moveNPCs();
 				  Gauntlet.MonsterSpawnerCollection.moveAllMonsters();
 				  Gauntlet.MissileLauncher.moveMissiles();
 				  Gauntlet.Renderer.render();
@@ -57,6 +58,8 @@
 								}
 								// set max monsters per spawner
 								Gauntlet.MonsterSpawnerCollection.setMonstersPerSpawner( Math.ceil( mapnum / levelsperworld ) );
+								// make all npcs
+								Gauntlet.NPCCollection.makeAllNPCs();
 								// make all monster spawners
 								Gauntlet.MonsterSpawnerCollection.makeAllSpawners();
 								// make all bosses
@@ -155,6 +158,7 @@
 					Gauntlet.MissileLauncher.killAllMissiles();
 					Gauntlet.Boss.killAllMissiles();
 					Gauntlet.Boss.sleep();
+					Gauntlet.NPCCollection.killAll();
 				},
 				startNewGame = function(){
 					// draw HUD

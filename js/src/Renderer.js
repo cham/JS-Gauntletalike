@@ -35,9 +35,13 @@
 				 * draws a tile at the position specified, with dimensions, tileType, [index,facing,offset]
 				 */
 				drawTile = function( ox , oy , dx , dy , tileType , tileIndex , facing , offS , subindex ){
-				  var spriteInfo , chunk , offset = offS || {x:0,y:0};
-				  spriteInfo = Gauntlet.Tileset.getSpriteInfo( tileType , tileIndex , facing , subindex );
-				  ctx.drawImage( spriteInfo.canvas, spriteInfo.x, spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox  + offset.x , oy  + offset.y , dx - ox , dy - oy );
+					var spriteInfo , chunk , offset = offS || {x:0,y:0};
+						spriteInfo = Gauntlet.Tileset.getSpriteInfo( tileType , tileIndex , facing , subindex );
+					try{
+						ctx.drawImage( spriteInfo.canvas, spriteInfo.x, spriteInfo.y , spriteInfo.tiledims.x, spriteInfo.tiledims.y, ox  + offset.x , oy  + offset.y , dx - ox , dy - oy );
+					}catch(e){
+						console.log(e);
+					}
 				},
 				drawBackground = function(){
 					_.each( _.uniq( updateList ) , function( i ){
@@ -52,6 +56,15 @@
 					  ox = pc.x * tx ,
 					  oy = pc.y * ty;
 				  drawTile( ox , oy , ox + tx , oy + ty , 'player' , +( playerSwitch > 3 ) , Gauntlet.Player.getFacing() , Gauntlet.Player.getOffset() );
+				},
+				drawNPCs = function(){
+					var npcs = Gauntlet.NPCCollection.getStates() ,
+						ox,oy;
+					_( npcs ).each(function(npcState){
+						ox = npcState.coords.x * tx;
+						oy = npcState.coords.y * ty;
+						drawTile( ox , oy , ox + tx , oy + ty , 'npc' , +( playerSwitch > 3 ) , npcState.facing , npcState.offset , npcState.npc.type );
+					});
 				},
 				drawMonsters = function(){
 				  var monsterStates = Gauntlet.MonsterSpawnerCollection.getAllMonsterStates() ,
@@ -138,6 +151,8 @@
 				  drawMissiles();
 				  // draw missiles
 				  drawBossMissiles();
+				  // draw NPCs
+				  drawNPCs();
 				  // canvas shake effect
 				  if( shakeEffectOn ){
 				  	shakeCanvas();
