@@ -14,7 +14,7 @@
 			module.speed = 3;
 			module.lifeleft = 120;
 			module.damage = 3;
-			module.setType( 2 ); // 1 is the boss' homing missile
+			module.setType( 3 ); // 1 is the boss' homing missile
 
 			/**
 			 * checkMovement

@@ -5,11 +5,11 @@
 "w0", "w0", "w1", "wi9","wim","wim","wi6","wi6","wi6","wi6","wi6","wiv","wi6","wi6","wi6","wi6","wi6","wi6","wi6","wi6","wi9","wi6","wim","wi6","wi6","wim","wim","wi6","wi9","wi6","wim",
 "w0", "w0", "w1", "wi9","win","win","wil","wil","wil","wil","wil","wil","wil","wil","wil","wil","wil","wil","wil","wil","wi9","wil","win","wil","wil","win","win","wil","wi9","wil","win",
 "w0", "w0", "w1", "wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fi", "fi", "fi", "fi" ,"fi", "fi", "wi9", "fi", "fi", 
-"w0", "w1", "f0", "wi9","fei","fj0","fj4","fj4","fj4","fj4","fj4","fj1","fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fi", "fi", "d0", "wiu","d0", "fi", "wi9", "fi", "fi", 
-"w0", "w1", "f0", "wi9","fi", "fj2","fj5","fj5","fj5","fj5","fj5","fj3","fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fi", "fi", "fi", "fi" ,"fi", "fi", "wi9", "fi", "fi", 
-"w0", "w1", "f0", "wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "d0", "wiu","d0", "fi", "fi", "wi9","fi", "fi", "fi", "fi", "fi" ,"fi", "fi", "wi9", "fi", "fi", 
-"w1", "f0", "f0", "wij","wic","wic","wic","wic","wic","wic","wic","wic","wik","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9", "fi", "fi", 
-"f0", "f0", "f0", "wi0","wi3","wi6","wi6","wi6","wi6","wi6","wi3","wi0","wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9", "fi", "fi", 
+"w0", "w1", "f0", "wi9","fi", "fj0","fj4","fj4","fj4","fj4","fj4","fj1","fi", "fi", "fi", "fi", "fei","fi", "fi", "fi", "wi9","fi", "fj0","fj4","fj4","fj4","fj1","fi", "wi9", "fi", "fi", 
+"w0", "w1", "f0", "wi9","fi", "fj2","fj5","fj5","fj5","fj5","fj5","fj3","fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fj6","fj8","fj8","fj8","fj7", "fi", "wi9", "fi", "fi", 
+"w0", "w1", "f0", "wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fj6","fj8","fj8","fj8","fj7","fi", "wi9", "fi", "fi", 
+"w1", "f0", "f0", "wij","wic","wic","wic","wic","wic","wic","wic","wic","wik","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9","fi", "fj2","fj5","fj5","fj5","fj3", "fi", "wi9", "fi", "fi", 
+"f0", "f0", "f0", "wi0","wi3","wi6","wi6","wi6","wi6","wi6","wi3","wi0","wi9","fi", "fi", "d0", "wiu","d0", "fi", "fi", "wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wi9", "fi", "fi", 
 "f0", "f0", "f0", "wi1","wi4","wi6","wi6","wi7","wi6","wi6","wi4","wi1","wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wij","wic","wie","fi", "wid","wic","wic","wic","wip","wic","wic", 
 "f0", "f0", "f0", "wi1","wi4","wi6","wi6","wi8","wi6","wi6","wi4","wi1","wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wiq","wi6","wir","fi", "wiq","wi6","wi6","wi6","wi6","wi6","wi6", 
 "f0", "f0", "f0", "wi2","wi4","wil","wil","wil","wil","wil","wi4","wi2","wi9","fi", "fi", "fi", "fi", "fi", "fi", "fi", "wiq","wi6","wir","fi", "wiq","wi6","wi6","wim","wi6","wi6","wi6", 
@@ -29,13 +29,13 @@
         "npcs": [
                 {
                         "type": 1,
-                        "x": 14,
-                        "y": 6
+                        "x": 5,
+                        "y": 4
                 },
                 {
                         "type": 0,
                         "x": 16,
-                        "y": 8
+                        "y": 9
                 },
                 {
                         "type": 3,

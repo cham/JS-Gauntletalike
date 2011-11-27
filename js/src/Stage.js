@@ -32,17 +32,16 @@
 				injectHUD = function(){
 				  var $_hud = jQuery( '<div></div>' );
 				  $_health = jQuery( '<div class="healthbar"><div></div></div>' );
-				  $_score = jQuery( '<span></span>' );
-				  $_lives = jQuery( '<span></span>' );
-				  $_multiplier = jQuery( '<span></span>' );
+				  $_score = jQuery( '<span class="score"></span>' );
+				  $_lives = jQuery( '<span class="lives"></span>' );
+				  $_multiplier = jQuery( '<span class="multiplier"></span>' );
 				  $_hud.append( 'Health: ' );
 				  $_hud.append( $_health );
+				  $_hud.append( $_lives );
 				  $_hud.append( 'Multiplier: ' );
 				  $_hud.append( $_multiplier )
 				  $_hud.append( 'Score: ' );
 				  $_hud.append( $_score );
-				  $_hud.append( 'Lives: ' );
-				  $_hud.append( $_lives );;
 				  jQuery( '.hud' ).append( $_hud );
 				},
 				/**
@@ -113,13 +112,13 @@
 				  return ( ind + coords.x );
 				},
 				updateHealth = function( h ){
-				  $_health.find( 'div' ).css( { width: h } );
+				  $_health.find( 'div' ).css( { width: ~~(h*1.5) } );
 				},
 				updateScore = function( s ){
 				  $_score.text( s );
 				},
 				updateLives = function( l ){
-				  $_lives.text( l );
+				  $_lives.text( 'x'+l );
 				},
 				updateMultiplier = function( m ){
 					$_multiplier.text( m );
