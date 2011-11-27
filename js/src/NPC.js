@@ -10,7 +10,7 @@
 
 		NPC = (function(){
 			var module = Gauntlet.MoveableAgent.instance();
-			module.speed = 3;
+			module.speed = 1;
 
 			module.weaponSpeed = 5;
 			module.currentSwing = 0;
@@ -70,14 +70,6 @@
 
 			module.setType = function( npcT ){
 			  this.type = npcT;
-			  switch( this.type ){
-				case '0':
-				  this.speed = 2;
-				  break;
-				default:
-				  this.speed = 2;
-				  break;
-			  }
 			};
 
 			return module;

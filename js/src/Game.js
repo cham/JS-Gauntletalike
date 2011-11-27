@@ -13,10 +13,10 @@
 			var	frametime = 35,
 				t,
 				stopped = false,
-				mapnum = 1 ,
 				levelsperworld = 3,
 				onlyDrawUpdated = false,
 				themes ,
+				mapnum = 1 ,
 				showIntro = true,
 				gameStarted = false,
 				tick = function(){
@@ -102,6 +102,9 @@
 				  if(mapnum === 4){
 				  	Gauntlet.Renderer.setShake(false);
 					Gauntlet.Renderer.setLightning(false);
+				  }
+				  if( mapnum === 9 ){
+				  	nextTheme();
 				  }
 				  if(nextWorld){
 				  	nextTheme();

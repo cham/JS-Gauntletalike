@@ -179,17 +179,20 @@
 					_( ~~(Math.random() * 5) ).times( function(){
 						Gauntlet.Stage.setOpacity(1);
 						window.setTimeout( function(){
-						Gauntlet.Stage.setOpacity(0.5);
+							Gauntlet.Stage.setOpacity(0.5);
 						} , ~~(Math.random * 1000)+100 );
 					});
 				},
 				setLightning = function(b){
 					lightningEffectOn = b;
-					if( !b ){
-						Gauntlet.Stage.setOpacity(1);
-					}else{
+					if( b ){
 						Gauntlet.Stage.setOpacity(0.5);
 					}
+				},
+				fadeIn = function( overhowlong ){
+debugger;
+					Gauntlet.Stage.setOpacity(0.5);
+					Gauntlet.Stage.getCanvas().animate({'opacity':1},overhowlong);
 				},
 				/**
 				 * updateHUD
@@ -212,7 +215,8 @@
 			  updateHUD: updateHUD,
 			  drawScene:drawScene,
 			  setShake:setShake,
-			  setLightning:setLightning
+			  setLightning:setLightning,
+			  fadeIn:fadeIn
 			}
 
 		})();
