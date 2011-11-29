@@ -35,32 +35,38 @@
                 {
                         "type": 5,
                         "x": 20,
-                        "y": 10
+                        "y": 10,
+                        "says": "What's happening?"
                 },
                 {
                         "type": 5,
                         "x": 24,
-                        "y": 8
+                        "y": 8,
+                        "says": "The whole castle is shaking!"
                 },
                 {
                         "type": 5,
                         "x": 17,
-                        "y": 5
+                        "y": 5,
+                        "says": "Maintain vigilance!"
                 },
                 {
-                        "type": 3,
+                        "type": 2,
                         "x": 12,
-                        "y": 14
+                        "y": 14,
+                        "says": "Woaaah!"
                 },
                 {
-                        "type": 3,
+                        "type": 4,
                         "x": 8,
-                        "y": 13
+                        "y": 13,
+                        "says": "Help!"
                 },
                 {
                         "type": 2,
                         "x": 11,
-                        "y": 15
+                        "y": 15,
+                        "says": "Earthquake!"
                 }
         ]
 }

@@ -31,6 +31,10 @@
 				if( this.firing ){
 					this.fire();
 				}
+				// if on NPC tile make them speak
+				_( Gauntlet.NPCCollection.getNPCsInTile(this.coords) ).each(function(npc){
+					npc.talk();
+				});
 				// if no current multiplier countdown return
 				if( !this.multiCount ){ return; }
 				this.multiCount--;
@@ -97,23 +101,23 @@
 						case 2:
 							// if not moving in x
 							if( vect[ 0 ] === 0 ){
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-6,y: this.offset.y} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+6,y: this.offset.y} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-4,y: this.offset.y} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+4,y: this.offset.y} , [vect[0],vect[1]] );
 							}else{
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-6} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+6} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-4} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+4} , [vect[0],vect[1]] );
 							}
 							break;
 						case 3:
 							// if not moving in x
 							if( vect[ 0 ] === 0 ){
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-6,y: this.offset.y} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+6,y: this.offset.y} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-4,y: this.offset.y} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+4,y: this.offset.y} , [vect[0],vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [1,vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [-1,vect[1]] );
 							}else if( vect[ 1 ] === 0 ){
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-6} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+6} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-4} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+4} , [vect[0],vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],1] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],-1] );
 							}
@@ -194,7 +198,6 @@
 			module.die = function(){
 				this.lives--;
 				if( this.lives < 0 ){
-					//Gauntlet.Game.stop();
 					Gauntlet.Game.end();
 					return;
 				}
@@ -223,10 +226,10 @@
 				this.weaponType++;
 				switch( this.weaponType ){
 					case 2:
-						this.weaponSpeed = 5;
+						this.weaponSpeed = 4;
 						Gauntlet.Missile.time = 30;
 						break;
-					case 2:
+					case 3:
 						this.weaponSpeed = 4;
 						Gauntlet.Missile.time = 30;
 						break;

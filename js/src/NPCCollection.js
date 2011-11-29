@@ -16,12 +16,13 @@
 			 * spawnNPC
 			 * creates a new NPC object and runs initialisation methods on it
 			 */
-			spawnNPC: function(type,coords){
+			spawnNPC: function(type,coords,says){
 			  var npc = Gauntlet.NPC.instance();
 
 			  npc.setPosition(coords);
 			  npc.setOffset({x:0, y:0});
 			  npc.setType(type);
+			  npc.setDialog(says);
 			  npc.count = ~~(Math.random() * 30); // random count down for first move
 			  this.npcs.push(npc);
 			},
@@ -93,7 +94,16 @@
 
 				this.killAll();
 				_(npcinfo).each(function(npc){
-					self.spawnNPC(npc.type,{x:npc.x,y:npc.y});
+					self.spawnNPC(npc.type,{x:npc.x,y:npc.y},npc.says);
+				});
+			},
+			/**
+			 * getNPCsInTile
+			 * returns an array of NPC that are in the coordinates given
+			 */
+			getNPCsInTile: function(c){
+				return _(this.npcs).filter(function(npc){
+					return _(npc.coords).isEqual(c);
 				});
 			}
 		};

@@ -189,11 +189,6 @@
 						Gauntlet.Stage.setOpacity(0.5);
 					}
 				},
-				fadeIn = function( overhowlong ){
-debugger;
-					Gauntlet.Stage.setOpacity(0.5);
-					Gauntlet.Stage.getCanvas().animate({'opacity':1},overhowlong);
-				},
 				/**
 				 * updateHUD
 				 * updates the HUD - health bar etc
@@ -215,8 +210,7 @@ debugger;
 			  updateHUD: updateHUD,
 			  drawScene:drawScene,
 			  setShake:setShake,
-			  setLightning:setLightning,
-			  fadeIn:fadeIn
+			  setLightning:setLightning
 			}
 
 		})();

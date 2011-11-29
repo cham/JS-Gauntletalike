@@ -37,6 +37,8 @@
 				start = function(){
 					// load Tileset images
 					Gauntlet.Tileset.load( function(){
+						// init Dialog
+						Gauntlet.Dialog.init();
 						// once loaded, laoad the stage data
 						Gauntlet.Stage.load( mapnum , function(){
 							// clear map

@@ -30,22 +30,26 @@
                 {
                         "type": 1,
                         "x": 5,
-                        "y": 4
+                        "y": 4,
+                        "says": "This is a most unnatural storm..."
                 },
                 {
                         "type": 0,
                         "x": 16,
-                        "y": 9
+                        "y": 9,
+                        "says": "The king is worried. Tell the guards to maintain vigilance!"
                 },
                 {
                         "type": 3,
                         "x": 21,
-                        "y": 7
+                        "y": 7,
+                        "says": "Oh! A boy! You shouldn't be here!"
                 },
                 {
                         "type": 4,
                         "x": 24,
-                        "y": 5
+                        "y": 5,
+                        "says": "You there! Out of the princess' chambers immediately!"
                 }
         ]
 }
