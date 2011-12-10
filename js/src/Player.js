@@ -25,6 +25,7 @@
 			module.currentSwing = 0;
 			module.weaponType = 1;
 			module.damage = 1;
+			module.weaponswitch = 1;
 
 			module.beforeMoving = function(){
 				// if firing then fire
@@ -109,17 +110,24 @@
 							}
 							break;
 						case 3:
+							this.weaponswitch = 1 - this.weaponswitch;
 							// if not moving in x
 							if( vect[ 0 ] === 0 ){
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-4,y: this.offset.y} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,  y: this.offset.y} , [vect[0],vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+4,y: this.offset.y} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [1,vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [-1,vect[1]] );
+								if(this.weaponswitch){
+									Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [1,vect[1]] );
+									Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [-1,vect[1]] );
+								}
 							}else if( vect[ 1 ] === 0 ){
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-4} , [vect[0],vect[1]] );
+								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y  } , [vect[0],vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+4} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],1] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],-1] );
+								if(this.weaponswitch){
+									Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],1] );
+									Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],-1] );
+								}
 							}
 							break;
 						default:

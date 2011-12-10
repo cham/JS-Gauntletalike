@@ -1,27 +1,57 @@
 {
-    "mapdata" : [
-                 "wq","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wk","wi","wj","wi","wq","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr",
-                 "wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fi","fx2","wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo",
-                 "wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","fj","fi","fk","wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo",
-                 "wo","fj","d1","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fl","wo","d1","fi","fi","fi","fi","fi","fl","fi","fi","d1","d1","fk","wo",
-                 "wo","fj","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wp","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","fi","fk","wo",
-                 "wo","fj","s2","fi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","fi","fi","s2","fi","d0","fi","fi","fi","fi","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fi","fi","fi","fl","fi","fi","fi","fi","fi","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fl","fi","fi","fi","fi","fi","d0","d0","fi","fi","fi","fi","fi","fi","fl","fi","fk","wo",
-                 "wo","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","fi","fi","fi","fk","wo",
-                 "wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fj","fi","fi","fk","wo",
-                 "wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fj","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fl","fi","fi","fi","fk","wo","fj","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","fi","fi","fi","s2","fk","wo","fj","fi","fi","fk","wo",
-                 "wo","fj","d0","fi","d0","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fj","fi","wl","wm","wm","wp","fj","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","fi","fk","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fj","fk","wj","wi","wj","wi","fj","fi","fl","fk","wo",
-                 "wo","fj","fi","fi","fi","fi","fi","fi","fi","fl","fi","fi","fi","fi","fi","fi","fi","d1","fk","wo","fj","fk","wi","wj","wi","wj","fj","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","fi","fi","fi","fi","fk","wo","fj","fi","fi","fi","d1","fi","fi","fi","fi","fk","wo",
-                 "wo","fj","s2","fi","fl","fi","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","d0","fi","fk","wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","fk","wo",
-                 "wo","fj","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","fi","fi","fi","fl","fi","fi","fk","wo","fj","fi","fi","fl","fi","d0","fi","d0","fi","fk","wo",
-                 "wn","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wk","fi","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wp",
-                 "wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fi","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj",
-                 "wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fe2","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj"
-                ] ,
-    "mapdims" : { "x":31,"y":22 }
+        "mapdata" : [
+"wq","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wk","wi","wj","wi","wq","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr",
+"wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fi","fx2","wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo",
+"wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","fj","fi","fk","wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo",
+"wo","fj","d1","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fl","wo","d1","fi","fi","fi","fi","fi","fl","fi","fi","d1","d1","fk","wo",
+"wo","fj","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wp","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","fi","fk","wo",
+"wo","fj","s2","fi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","fi","fi","s2","fi","d0","fi","fi","fi","fi","fi","fi","fk","wo",
+"wo","fj","fi","fi","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fi","fi","fi","fl","fi","fi","fi","fi","fi","fi","fi","fk","wo",
+"wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fl","fi","fi","fi","fi","fi","d0","d0","fi","fi","fi","fi","fi","fi","fl","fi","fk","wo",
+"wo","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","fi","fi","fi","fk","wo",
+"wo","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fj","fi","fi","fk","wo",
+"wo","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fj","fi","fi","fk","wo",
+"wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fi","fl","fi","fi","fi","fk","wo","fj","fi","fi","fk","wo",
+"wo","fj","fi","fi","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wr","fi","fi","fi","s2","fk","wo","fj","fi","fi","fk","wo",
+"wo","fj","d0","fi","d0","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wo","fj","fi","wl","wm","wm","wp","fj","fi","fi","fk","wo",
+"wo","fj","fi","fi","fi","fk","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wo","fj","fk","wj","wi","wj","wi","fj","fi","fl","fk","wo",
+"wo","fj","fi","fi","fi","fi","fi","fi","fi","fl","fi","fi","fi","fi","fi","fi","fi","d1","fk","wo","fj","fk","wi","wj","wi","wj","fj","fi","fi","fk","wo",
+"wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","fi","fi","fi","fi","fk","wo","fj","fi","fi","fi","d1","fi","fi","fi","fi","fk","wo",
+"wo","fj","s2","fi","fl","fi","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","d0","fi","fk","wo","fj","fi","fi","fi","fi","fi","fi","fi","fi","fk","wo",
+"wo","fj","fi","fi","fi","fi","fi","fi","d0","fi","fi","fi","fi","fi","fi","fl","fi","fi","fk","wo","fj","fi","fi","fl","fi","d0","fi","d0","fi","fk","wo",
+"wn","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wk","fi","fi","fi","wl","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wm","wp",
+"wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fi","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj",
+"wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fe2","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj"
+        ] ,
+        "mapdims" : { "x":31,"y":22 },
+        "npcs": [
+                {
+                        "type": 4,
+                        "x": 14,
+                        "y": 16,
+                        "says": "The castle has been overrun by the undead!"
+                },
+                {
+                        "type": 2,
+                        "x": 3,
+                        "y": 11,
+                        "says": "Aaargh!"
+                },
+                {
+                        "type": 3,
+                        "x": 25,
+                        "y": 17,
+                        "says": "You saved me! My hero!",
+                        "gives": {
+                                "type": "health",
+                                "value": 100
+                        }
+                },
+                {
+                        "type": 4,
+                        "x": 15,
+                        "y": 3,
+                        "says": "Go away! Find your own hiding place!"
+                }
+        ]
 }

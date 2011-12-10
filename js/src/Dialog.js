@@ -9,6 +9,8 @@
 		Gauntlet = window.Gauntlet || {} ,
 
 		fadeTime = 500,
+		showTime = 2500,
+		fadeTo = 0.85,
 
 		DialogMessage = {
 			showing: false,
@@ -16,13 +18,14 @@
 			onClose: null,
 			show: function($appendTo){
 				var self = this;
+				this.$el.css({'z-index':_.uniqueId()});
 				$appendTo.append(this.$el);
-				this.$el.fadeIn(fadeTime,function(){
+				this.$el.fadeTo(fadeTime,fadeTo,function(){
 					this.showing = true;
 				});
 				window.setTimeout(function(){
 					self.hide();
-				},4000);
+				},showTime);
 			},
 			hide: function(){
 				var self = this;
@@ -40,7 +43,7 @@
 				this.$el = jQuery( '<div class="dialog-message"><div class="dialog-text">' + txt + '</div></div>' ).css({
 					'position':'absolute',
 					'top':pos.top,
-					'left':pos.left
+					'left':pos.left-20
 				});
 				this.$el.hide();
 				this.onClose = function(){
