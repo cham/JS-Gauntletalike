@@ -114,11 +114,14 @@
 					drawTile( ox , oy , ox + tx , oy + ty , 'boss' , +( altSwitch > 5 ) , ''+bossType , null , ''+i );
 				  } );
 				},
-				drawScene = function( path ){
-					// load image then draw it into the canvas
+				drawScene = function(path, data){
+					// load image and draw it into the canvas
 					var preload = new Image();
 					preload.onload = function(){
 						ctx.drawImage( preload , 0 , 0 );
+						_(data).each(function(dataItem,k){
+console.log(dataItem,k);
+						});
 					}
 					preload.src = path;
 				},
@@ -194,7 +197,6 @@
 				 * updates the HUD - health bar etc
 				 */
 				updateHUD = function(){
-				  // todo don't use dom elements
 				  Gauntlet.Stage.updateHealth( Gauntlet.Player.getHealth() );
 				  Gauntlet.Stage.updateScore( Gauntlet.Player.getScore() );
 				  Gauntlet.Stage.updateLives( Gauntlet.Player.getLives() );

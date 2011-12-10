@@ -111,7 +111,7 @@
 				  this.damage = 6;
 				  this.pointsWorth = 50;
 				  this.weaponSpeed = 4;
-				  this.health = 3;
+				  this.health = 6;
 				  this.pathfinder = true;
 				  break;
 				default:

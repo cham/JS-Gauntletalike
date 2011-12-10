@@ -26,6 +26,7 @@
 			module.weaponType = 1;
 			module.damage = 1;
 			module.weaponswitch = 1;
+			module.invincible = false;
 
 			module.beforeMoving = function(){
 				// if firing then fire
@@ -162,11 +163,12 @@
 			};
 
 			module.hurt = function( howmuch ){
-			  this.health -= howmuch;
-			  if( this.health < 1 ){
-				this.die();
-			  }
-			  Gauntlet.Renderer.updateHUD();
+				if(this.invincible){ return; }
+				this.health -= howmuch;
+				if( this.health < 1 ){
+					this.die();
+				}
+				Gauntlet.Renderer.updateHUD();
 			};
 
 			module.heal = function( howmuch ){

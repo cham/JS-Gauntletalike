@@ -18,7 +18,12 @@
 				themes ,
 				mapnum = 1 ,
 				showIntro = true,
-				gameStarted = false,
+				gameRunning = false,
+				worldscenes = [
+					[2,3],
+					[4,5],
+					[6,7]
+				],
 				tick = function(){
 				  //Renderer.clear();
 				  Gauntlet.Player.move();
@@ -26,6 +31,7 @@
 				  Gauntlet.MonsterSpawnerCollection.moveAllMonsters();
 				  Gauntlet.MissileLauncher.moveMissiles();
 				  Gauntlet.Renderer.render();
+				  Gauntlet.Stage.updateTime();
 				  if( Gauntlet.Boss.isActive() ){
 					Gauntlet.Boss.fire();
 					Gauntlet.Boss.moveMissiles();
@@ -70,16 +76,17 @@
 								}
 								// start tick
 								tick();
-								gameStarted = true;
+								gameRunning = true;
 							}
 							// listen for keyboard input
 							Gauntlet.Controller.listen();
 							// if showing the intro, restore themes, load scene 0
 							if( showIntro ){
 								restoreThemes();
-								Gauntlet.Scene.showAndWait( 0 , function(){
+								Gauntlet.Scene.showSequenceAndWait([0,1], function(){
 									nextTheme();
 									startTheGame();
+									Gauntlet.Stage.resetTime();
 									Gauntlet.Renderer.setLightning(true);
 								});
 								showIntro = false;
@@ -94,27 +101,35 @@
 				  window.clearTimeout( t );
 				},
 				nextLevel = function(){
-				  var nextWorld = ((mapnum % levelsperworld) === 0);
-				  stop();
-				  killAllSprites();
-				  mapnum++;
-				  if(mapnum === 2){
-				  	Gauntlet.Renderer.setShake(true);
-				  }
-				  if(mapnum === 4){
-				  	Gauntlet.Renderer.setShake(false);
-					Gauntlet.Renderer.setLightning(false);
-				  }
-				  if( mapnum === 9 ){
-				  	nextTheme();
-				  }
-				  if(nextWorld){
-				  	nextTheme();
-				  	if( mapnum === 7 || mapnum === 10 ){
-				  	  Gauntlet.Player.upgradeWeapon();
-				    }
-				  }
-				  start();
+					var nextWorld = ((mapnum % levelsperworld) === 0),
+						worldnum = ~~((mapnum) / levelsperworld);
+					stop();
+					killAllSprites();
+					Gauntlet.Dialog.killAll();
+					mapnum++;
+					if(mapnum === 2){
+						Gauntlet.Renderer.setShake(true);
+					}
+					if(mapnum === 4){
+						Gauntlet.Renderer.setShake(false);
+						Gauntlet.Renderer.setLightning(false);
+					}
+					if(mapnum === 9){
+						nextTheme();
+					}
+					if(nextWorld){
+						gameRunning = false;
+						Gauntlet.Scene.showSequenceAndWait(worldscenes[worldnum-1],function(){
+							nextTheme();
+							if(mapnum === 7 || mapnum === 10){
+								Gauntlet.Player.upgradeWeapon();
+							}
+							gameRunning = true;
+							start();
+						});
+					}else{
+						start();
+					}
 				},
 				restartLevel = function(){
 					stop();
@@ -143,7 +158,7 @@
 				 * returns true if the game is in progress - used by Controller to switch between showing a Scene or controlling the player
 				 */
 				gameInProgress = function(){
-					return gameStarted;
+					return gameRunning;
 				},
 				/**
 				 * end
@@ -155,7 +170,7 @@
 					Gauntlet.Player.reset();
 					mapnum = 1;
 					showIntro = true;
-					gameStarted = false;
+					gameRunning = false;
 					start();
 				},
 				killAllSprites = function(){

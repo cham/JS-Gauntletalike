@@ -25,5 +25,13 @@
                 ] ,
     "mapdims" : { "x":31,"y":22 },
     "bosslocation": { "x":15,"y":2 },
-    "bosstype": 0
+    "bosstype": 0,
+        "npcs": [
+                {
+                        "type": 4,
+                        "x": 11,
+                        "y": 21,
+                        "says": "A dragon!"
+                }
+        ]
 }

@@ -27,9 +27,9 @@
 					self.hide();
 				},showTime);
 			},
-			hide: function(){
+			hide: function(howfast){
 				var self = this;
-				this.$el.fadeOut(fadeTime,function(){
+				this.$el.fadeOut(howfast||fadeTime,function(){
 					this.showing = false;
 					self.$el.remove();
 					if(self.onClose && _.isFunction(self.onClose)){
@@ -97,6 +97,12 @@
 							dialog.show($el);
 						}
 					});
+				},
+				killAll: function(){
+					_(dialogs).each(function(dialog){
+						dialog.hide(1);
+					});
+					dialogs = [];
 				},
 				init: function(){
 					var $appendTo = jQuery('.gamecontainer');
