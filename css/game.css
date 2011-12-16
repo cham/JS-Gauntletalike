@@ -45,12 +45,19 @@ h1 {
 .hud {
   position: absolute;
   top: 5px;
-  height:20px;
+  height:570px;
   width: 734px;
   padding: 5px 5px;
 }
 .hud span {
   margin-right: 40px;
+}
+.hud .currentlevel {
+  position:absolute;
+  left:5px;
+  bottom:0;
+  color: white;
+  text-shadow: 0px 0px 5px black;
 }
 .game {
   position: absolute;

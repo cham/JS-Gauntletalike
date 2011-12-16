@@ -23,5 +23,31 @@
 "wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","fj","fi","fk","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj",
 "wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","fj","fi","fx2","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi","wj","wi"
         ] ,
-        "mapdims" : { "x":31,"y":22 }
+        "mapdims" : { "x":31,"y":22 },
+        "npcs": [
+                {
+                        "type": 2,
+                        "x": 25,
+                        "y": 7,
+                        "says": "I saw something scaly in the throne room!"
+                },
+                {
+                        "type": 5,
+                        "x": 12,
+                        "y": 2,
+                        "says": "Some evil creature has taken control of the castle!"
+                },
+                {
+                        "type": 11,
+                        "x": 11,
+                        "y": 14,
+                        "says": "S..s..skeletons!"
+                },
+                {
+                        "type": 5,
+                        "x": 13,
+                        "y": 18,
+                        "says": "Don't go up there!"
+                }
+        ]
 }

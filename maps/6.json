@@ -26,13 +26,13 @@
         "mapdims" : { "x":31,"y":22 },
         "npcs": [
                 {
-                        "type": 2,
+                        "type": 7,
                         "x": 25,
                         "y": 13,
                         "says": "The castle lies ahead through the forest. Take care!"
                 },
                 {
-                        "type": 4,
+                        "type": 15,
                         "x": 11,
                         "y": 19,
                         "says": "Lizardmen! Run!"

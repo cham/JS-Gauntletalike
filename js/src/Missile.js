@@ -13,7 +13,7 @@
 			// set speed
 			module.speed = 10;
 			module.type = 0; // 0 is the default player missile
-			module.time = 16;
+			module.time = 9;
 
 			/**
 			 * timeOut

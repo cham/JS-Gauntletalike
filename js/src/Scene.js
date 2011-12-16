@@ -21,7 +21,9 @@
 					'world2-end.png',
 					'world3-start.png',
 					'world3-end.png',
-					'world4-start.png'
+					'world4-start.png',
+					'world4-end.png',
+					'world5-start.png'
 				],
 				sequence = [],
 				onProceed = null,
@@ -38,6 +40,10 @@
 					waitTime = new Date();
 				},
 				nextInSequence = function(){
+					if(!sequence.length){
+						waitTime = new Date();
+						return;
+					}
 					var nextScene = sequence.shift();
 					Gauntlet.Renderer.drawScene(rootPath + scenes[ nextScene ]);
 					waitTime = new Date();

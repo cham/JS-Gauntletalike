@@ -28,7 +28,7 @@
     "bosstype": 0,
         "npcs": [
                 {
-                        "type": 4,
+                        "type": 15,
                         "x": 11,
                         "y": 21,
                         "says": "A dragon!"

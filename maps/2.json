@@ -51,10 +51,10 @@
                         "says": "Argh!"
                 },
                 {
-                        "type": 2,
+                        "type": 10,
                         "x": 12,
                         "y": 14,
-                        "says": "Woaaah!"
+                        "says": "Meow!"
                 },
                 {
                         "type": 4,

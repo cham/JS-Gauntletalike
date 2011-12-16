@@ -11,6 +11,7 @@
 		fadeTime = 500,
 		showTime = 2500,
 		fadeTo = 0.85,
+		moveBy = { top: 30 , left: -20 },
 
 		DialogMessage = {
 			showing: false,
@@ -42,8 +43,8 @@
 				// make $el
 				this.$el = jQuery( '<div class="dialog-message"><div class="dialog-text">' + txt + '</div></div>' ).css({
 					'position':'absolute',
-					'top':pos.top,
-					'left':pos.left-20
+					'top':pos.top+moveBy.top,
+					'left':pos.left+moveBy.left
 				});
 				this.$el.hide();
 				this.onClose = function(){

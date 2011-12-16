@@ -195,7 +195,7 @@
 
 					map[goal.y][goal.x] = 'g';
 					map[start.y][start.x] = 's';
-					path = astar( map , 'diagonal' , true );
+					path = astar( map , 'manhattan' , true );
 					if( path && path.length > 1 ){
 						// else calculate movement to NodeCoordinate 2 ([1])
 						nextPos = path[1];
@@ -212,11 +212,47 @@
 					map[goal.y][goal.x] = 'w';
 					map[start.y][start.x] = 'w';
 					return movement;
+				},
+				getMovementSequenceFromTo = function(c,g,seqSize){
+					var map = Gauntlet.Stage.getWalkableMap() ,
+						goal = g ,
+						start = c ,
+						path = [] , sequence = [] , nextPos , nextX , nextY;
+
+					if( goal.y === start.y && goal.x === start.x ){ return [0,0]; }
+
+					map[goal.y][goal.x] = 'g';
+					map[start.y][start.x] = 's';
+					path = astar( map , 'manhattan' , true );
+					if( path && path.length > 1 ){
+						sequence = _(path).chain()
+										.rest()
+										.first(seqSize)
+										.map(function(pathitem){
+											nextX = pathitem.col-start.x;
+											nextY = pathitem.row-start.y;
+											if( nextX !== 0 ){
+												nextX /= Math.abs( nextX );
+											}
+											if( nextY !== 0 ){
+												nextY /= Math.abs( nextY );
+											}
+											start.x = pathitem.col;
+											start.y = pathitem.row;
+											return [ nextX , nextY ];
+										})
+										.compact()
+										.value();
+					}
+					map[goal.y][goal.x] = 'w';
+					map[start.y][start.x] = 'w';
+					return sequence;
 				};
 
 			return {
 
-				'getMovementFromTo': _( getMovementFromTo ).memoize( function(a,b){ return '' +a.x+','+a.y+','+b.x+','+b.y; } )
+				'getMovementFromTo': _( getMovementFromTo ).memoize( function(a,b){ return '' +a.x+','+a.y+','+b.x+','+b.y; } ),
+				'getMovementSequenceFromTo': _( getMovementSequenceFromTo ).memoize( function(a,b,c){ return '' +a.x+','+a.y+','+b.x+','+b.y+','+c; } ),
 
 			};
 

@@ -18,11 +18,25 @@
 			module.type = 1;
 			module.damage = 3;
 			module.health = 1;
+			module.astarinterval = 0;
+			module.astarinterval_max = 8;
+			module.astarmovement = [];
+			module.flying = false;
 
 			module.pathfinder = false;
 
 			module.getPointValue = function(){
 			  return this.pointsWorth;
+			};
+
+			// caches movement and only interrogates AStar once every astarinterval_max calls
+			module.getAStarMovement = function(from,to){
+				this.astarinterval--;
+				if( this.astarinterval < 0 ){
+					this.astarinterval = this.astarinterval_max;
+					this.astarmovement = Gauntlet.AStar.getMovementFromTo(from,to);
+				}
+				return this.astarmovement;
 			};
 
 			/**
@@ -33,13 +47,13 @@
 			  var playerPos = Gauntlet.Player.getPosition() ,
 				  xdiff = this.coords.x - playerPos.x ,
 				  ydiff = this.coords.y - playerPos.y ,
-				  vectorToPlayer = this.pathfinder ? Gauntlet.AStar.getMovementFromTo( {x:this.coords.x,y:this.coords.y} , {x:playerPos.x,y:playerPos.y} ) : ( [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ] ) ,
+				  vectorToPlayer = this.pathfinder ? this.getAStarMovement({x:this.coords.x,y:this.coords.y} , {x:playerPos.x,y:playerPos.y}) : ( [ xdiff > 0 ? -1 : ( xdiff < 0 ? 1 : 0 ) , ydiff > 0 ? -1 : ( ydiff < 0 ? 1 : 0 ) ] ) ,
 				  vectX = [ vectorToPlayer[ 0 ] , 0 ], vectY = [ 0 , vectorToPlayer[ 1 ] ],
 				  newOffset = this.getNewOffset( vectorToPlayer ) ,
 				  newTilePos = { x: this.coords.x + newOffset.tileX , y: this.coords.y + newOffset.tileY },
 				  tile = Gauntlet.Stage.getTileAt( newTilePos );
 			  // if tile in vectorToPlayer direction is a floor tile, set it and return
-			  if( (tile.substr(0,1) === 'f' || tile.substr(0,1) === 's') ){
+			  if( this.flying || (tile.substr(0,1) === 'f' || tile.substr(0,1) === 's')){
 				this.moving = vectorToPlayer;
 			  }else{
 				// else if tile in x is ok
@@ -62,7 +76,7 @@
 			};
 
 			module.canMoveIntoTile = function( t , newCoords ){
-				return ( t.substr(0,1) === "f" || t.substr(0,1) === 's' ) && Gauntlet.MonsterSpawnerCollection.isTileFree( newCoords , this );
+				return (this.flying || ( t.substr(0,1) === "f" || t.substr(0,1) === 's' )) && Gauntlet.MonsterSpawnerCollection.isTileFree( newCoords , this );
 			};
 
 			module.afterMoving = function(){
@@ -85,12 +99,14 @@
 				  this.damage = 3;
 				  this.pointsWorth = 5;
 				  this.weaponSpeed = 5;
+				  this.health = 1;
 				  break;
 				case '1':
 				  this.speed = 4;
 				  this.damage = 6;
 				  this.pointsWorth = 10;
 				  this.weaponSpeed = 6;
+				  this.health = 1;
 				  break;
 				case '2':
 				  this.speed = 2;
@@ -105,13 +121,29 @@
 				  this.pointsWorth = 7;
 				  this.weaponSpeed = 4;
 				  this.health = 1;
+				  this.flying = true;
 				  break;
 				case '4':
 				  this.speed = 3;
 				  this.damage = 6;
 				  this.pointsWorth = 50;
 				  this.weaponSpeed = 4;
-				  this.health = 6;
+				  this.health = 4;
+				  this.pathfinder = true;
+				  break;
+				case '5':
+				  this.speed = 2;
+				  this.damage = 1;
+				  this.pointsWorth = 5;
+				  this.weaponSpeed = 5;
+				  this.health = 4;
+				  break;
+				case '6':
+				  this.speed = 4;
+				  this.damage = 6;
+				  this.pointsWorth = 75;
+				  this.weaponSpeed = 4;
+				  this.health = 5;
 				  this.pathfinder = true;
 				  break;
 				default:

@@ -38,6 +38,7 @@
 				  $_lives = jQuery( '<span class="lives"></span>' );
 				  $_multiplier = jQuery( '<span class="multiplier"></span>' );
 				  $_time = jQuery( '<span class="multiplier"></span>' );
+				  $_level = jQuery( '<span class="currentlevel"></span>' );
 				  $_hud.append( 'Health: ' );
 				  $_hud.append( $_health );
 				  $_hud.append( $_lives );
@@ -47,6 +48,7 @@
 				  $_hud.append( $_score );
 				  $_hud.append( 'Time: ' );
 				  $_hud.append( $_time );
+				  $_hud.append( $_level );
 				  jQuery( '.hud' ).append( $_hud );
 				},
 				/**
@@ -148,6 +150,9 @@
 						diff = timenow.getTime() - start_time.getTime();
 					$_time.text( formatTimeDiff(diff/1000) );
 				},
+				updateLevel = function(lnum){
+					$_level.text(lnum);
+				},
 				setOpacity = function(v){
 					$_canvas.css({opacity:v});
 				};
@@ -170,7 +175,8 @@
 			  getCanvas:function(){return $_canvas;},
 			  setOpacity:setOpacity,
 			  resetTime:resetTime,
-			  updateTime:updateTime
+			  updateTime:updateTime,
+			  updateLevel:updateLevel
 			};
 
 		})();

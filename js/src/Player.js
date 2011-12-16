@@ -16,12 +16,12 @@
 			module.canfire = true;
 			module.health = 100;
 			module.score = 0;
-			module.lives = 3;
+			module.lives = 5;
 			module.multiplier = 1;
 			module.multiCount = 0;
 			module.multiCountFrom = 20;
 			module.firing = false;
-			module.weaponSpeed = 5;
+			module.weaponSpeed = 4;
 			module.currentSwing = 0;
 			module.weaponType = 1;
 			module.damage = 1;
@@ -115,7 +115,7 @@
 							// if not moving in x
 							if( vect[ 0 ] === 0 ){
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x-4,y: this.offset.y} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,  y: this.offset.y} , [vect[0],vect[1]] );
+								//Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,  y: this.offset.y} , [vect[0],vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x+4,y: this.offset.y} , [vect[0],vect[1]] );
 								if(this.weaponswitch){
 									Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [1,vect[1]] );
@@ -123,7 +123,7 @@
 								}
 							}else if( vect[ 1 ] === 0 ){
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y-4} , [vect[0],vect[1]] );
-								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y  } , [vect[0],vect[1]] );
+								//Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y  } , [vect[0],vect[1]] );
 								Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y+4} , [vect[0],vect[1]] );
 								if(this.weaponswitch){
 									Gauntlet.MissileLauncher.fireMissile( {x: this.coords.x,y: this.coords.y} , {x: this.offset.x,y: this.offset.y} , [vect[0],1] );
@@ -235,9 +235,12 @@
 			module.upgradeWeapon = function(){
 				this.weaponType++;
 				switch( this.weaponType ){
+					case 1:
+						this.weaponSpeed = 5;
+						Gauntlet.Missile.time = 16;
 					case 2:
 						this.weaponSpeed = 4;
-						Gauntlet.Missile.time = 30;
+						Gauntlet.Missile.time = 20;
 						break;
 					case 3:
 						this.weaponSpeed = 4;
