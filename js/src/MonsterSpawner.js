@@ -62,7 +62,7 @@
 			  var mPos;
 			  return _( this.monsters ).select( function( monster ){
 				mPos = monster.getPosition();
-				return ( mPos.x === checkCoords.x && mPos.y === checkCoords.y && monster !== ignoreMonster );
+				return !monster.flying && ( mPos.x === checkCoords.x && mPos.y === checkCoords.y && monster !== ignoreMonster );
 			  } ).length < 1;
 			},
 			/**

@@ -23,7 +23,9 @@
 					'world3-end.png',
 					'world4-start.png',
 					'world4-end.png',
-					'world5-start.png'
+					'world5-start.png',
+					'world5-end.png',
+					'world6-start.png'
 				],
 				sequence = [],
 				onProceed = null,

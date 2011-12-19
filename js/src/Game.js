@@ -16,15 +16,16 @@
 				levelsperworld = 3,
 				onlyDrawUpdated = false,
 				themes ,
-				mapnum = 9 ,
-				showIntro = false,
+				mapnum = 1 ,
+				showIntro = true,
 				gameRunning = false,
-				playaudio = false,
+				playaudio = true,
 				worldscenes = [
 					[2,3],
 					[4,5],
 					[6,7],
-					[8,9]
+					[8,9],
+					[10,11]
 				],
 				tick = function(){
 				  //Renderer.clear();
@@ -148,7 +149,7 @@
 				// todo - make Audio class
 				// todo - put this in the map data
 				nextTheme = function(){
-					if( !themes.length || !playaudio ){ return; }
+					if(!themes || !themes.length || !playaudio){ return; }
 				 	var playNext = themes.shift();
 				 	jQuery( '#youtubecontainer' ).html( '<object width="1" height="1" style="position:absolute;left:-5000px;"><param name="movie" value="http://www.youtube.com/v/' + playNext + '?version=3&amp;hl=en_GB&amp;autoplay=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/' + playNext + '?version=3&amp;hl=en_GB&amp;autoplay=1" type="application/x-shockwave-flash" width="1" height="1" allowscriptaccess="always" allowfullscreen="true"></embed></object>' );
 				},
@@ -157,7 +158,7 @@
 				 * plays the intro theme and restored themes array
 				 */
 				restoreThemes = function(){
-					themes = [ 'X5nJXQL04gQ' , 'vHqjziy-Epc' , 'ULXnfaQg-ZI' , 'RzkIiflWggU' , '8lhpWOfwRyY' , 'NYpf6lfr_Is' ,'F2mOlCNRe_o' ];
+					themes = [ 'X5nJXQL04gQ' , 'vHqjziy-Epc' , 'ULXnfaQg-ZI' , 'RzkIiflWggU' , '8lhpWOfwRyY' , 'NYpf6lfr_Is' , 'F2mOlCNRe_o' , 'idGcxuOizdQ' ];
 					nextTheme();
 				},
 				/**

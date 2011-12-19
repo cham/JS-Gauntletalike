@@ -246,6 +246,10 @@
 						this.weaponSpeed = 4;
 						Gauntlet.Missile.time = 30;
 						break;
+					case 4:
+						this.weaponSpeed = 3;
+						Gauntlet.Missile.time = 30;
+						break;
 					default:
 						break;
 				}

@@ -1,0 +1,29 @@
+{
+        "mapdata" : [
+
+"wq", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wr", 
+"wo", "wj", "wi", "wj", "wi", "wj", "wo", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wo", 
+"wo", "fj", "fi", "s7", "fi", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fi", "fi", "fi", "fk", "wo", "fj", "s3", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "s3", "fi", "fk", "wo",
+"wo", "fj", "fi", "wo", "fi", "fk", "wo", "fj", "fi", "fi", "wl", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wo", "fj", "fi", "fk", "wi", "wj", "wi", "wj", "wi", "wo", "wi", "wj", "wi", "wj", "wn", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo", "fj", "fi", "fi", "fk", "wi", "wn", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wn", "wm", "wm", "wm", "wm", "wm", "wk", "fi", "fk", "wo", "fe3","fi", "fi", "fi", "fk", "wj", "wn", "wm", "wm", "wm", "wk", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "fj", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fk", "wi", "wj", "wi", "wj", "wi", "fj", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wo", 
+"wo", "fj", "fk", "wo", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wo", "wi", "wj", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wo", 
+"wo", "fj", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fi", "wq", "wm", "wm", "wm", "wm", "wm", "wk", "fi", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "wq", "wm", "wm", "wm", "wk", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wo", "wi", "wj", "wi", "wj", "wi", "wj", "fj", "fk", "wo", "fx2","fi", "fi", "fi", "fi", "wq", "wp", "wi", "wj", "wi", "wj", "fj", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo", "fj", "fi", "fi", "fi", "wq", "wp", "wj", "fj", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wo", "fj", "fk", "wo", "fj", "fi", "fi", "wl", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wp", "wi", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fk", "wj", "fj", "fk", "wo", "fj", "fi", "fk", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wo", "fj", "fi", "fi", "fi", "fk", "wo", "fj", "s3", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "s3", "fi", "fk", "wo",
+"wo", "fj", "fi", "s7", "fi", "fk", "wo", "fj", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fk", "wo",
+"wn", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wm", "wp", 
+"wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj"
+
+        ] ,
+        "mapdims" : { "x":31,"y":22 }
+}

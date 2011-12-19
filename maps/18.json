@@ -1,0 +1,31 @@
+{
+        "mapdata" : [
+
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", 
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", 
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "wq", "wm", "wm", "wm", "wm", "wm", "wr", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "wq", "wm", "wm", "wp", "fi", "fi", "fi", "fi", "fi", "wn", "wm", "wm", "wr", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "wq", "wp", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wn", "wr", "f0", "f0", "f0", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "f0", "wq", "wp", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wn", "wr", "f0", "f0", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "wq", "wp", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wn", "wr", "f0", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "f0", "wo", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wo", "f0", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wq", "wp", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wn", "wr", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wo", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wo", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wo", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wo", "f0", "f0", "f0", "f0", 
+"f0", "f0", "f0", "f0", "f0", "f0", "wo", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wo", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wo", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wo", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wn", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wq", "wp", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wj", "wo", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wo", "wi", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wi", "wn", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wq", "wp", "wj", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wj", "wi", "wn", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wq", "wp", "wj", "wi", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wi", "wj", "wj", "wn", "wr", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "fi", "wq", "wp", "wj", "wi", "wj", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wj", "wi", "wj", "wi", "wn", "wm", "wm", "wr", "fi", "fi", "fi", "fi", "fe3","wq", "wm", "wm", "wp", "wi", "wi", "wj", "wi", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wi", "wj", "wi", "wj", "wj", "wi", "wj", "wn", "wm", "wm", "wm", "wm", "wm", "wp", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "f0", "f0", "f0", "f0",
+"f0", "f0", "f0", "f0", "f0", "f0", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "f0", "f0", "f0", "f0", 
+"f0", "f0", "f0", "f0", "f0", "f0", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "wi", "wj", "f0", "f0", "f0", "f0"
+
+        ] ,
+        "mapdims" : { "x":31,"y":22 },
+	    "bosslocation": { "x":15,"y":3 },
+	    "bosstype": 0
+}
