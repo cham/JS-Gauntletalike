@@ -139,19 +139,19 @@
 				  this.health = 4;
 				  break;
 				case '6':
-				  this.speed = 4;
-				  this.damage = 6;
+				  this.speed = 3;
+				  this.damage = 4;
 				  this.pointsWorth = 75;
 				  this.weaponSpeed = 4;
-				  this.health = 5;
+				  this.health = 4;
 				  this.pathfinder = true;
 				  break;
 				case '7':
 				  this.speed = 4;
-				  this.damage = 6;
-				  this.pointsWorth = 75;
+				  this.damage = 5;
+				  this.pointsWorth = 100;
 				  this.weaponSpeed = 4;
-				  this.health = 5;
+				  this.health = 4;
 				  this.pathfinder = true;
 				  break;
 				default:

@@ -13,12 +13,12 @@
 			var	frametime = 35,
 				t,
 				stopped = false,
+				gameRunning = false,
 				levelsperworld = 3,
 				onlyDrawUpdated = false,
 				themes ,
 				mapnum = 1 ,
 				showIntro = true,
-				gameRunning = false,
 				playaudio = true,
 				worldscenes = [
 					[2,3],
@@ -181,6 +181,10 @@
 					gameRunning = false;
 					start();
 				},
+				completed = function(){
+					stop();
+					alert('You have completed the game! End sequence goes here');
+				},
 				killAllSprites = function(){
 					Gauntlet.MonsterSpawnerCollection.killAll();
 					Gauntlet.MissileLauncher.killAllMissiles();
@@ -202,7 +206,8 @@
 			  onlyDrawUpdated:onlyDrawUpdated,
 			  gameInProgress:gameInProgress,
 			  end:end,
-			  startNewGame:startNewGame
+			  startNewGame:startNewGame,
+			  completed:completed
 			};
 
 		})();

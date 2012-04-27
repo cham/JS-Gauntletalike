@@ -195,6 +195,7 @@
 
 					map[goal.y][goal.x] = 'g';
 					map[start.y][start.x] = 's';
+
 					path = astar( map , 'manhattan' , true );
 					if( path && path.length > 1 ){
 						// else calculate movement to NodeCoordinate 2 ([1])
@@ -223,6 +224,7 @@
 
 					map[goal.y][goal.x] = 'g';
 					map[start.y][start.x] = 's';
+
 					path = astar( map , 'manhattan' , true );
 					if( path && path.length > 1 ){
 						sequence = _(path).chain()

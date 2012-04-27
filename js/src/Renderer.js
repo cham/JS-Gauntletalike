@@ -96,33 +96,48 @@
 				  } );
 				},
 				drawBoss = function(){
-				  if( !Gauntlet.Boss.isActive() ){
-					return;
-				  }
-				  var bossCoords = Gauntlet.Boss.getPosition() ,
-				  	  bossType = Gauntlet.Boss.getType() ,
-					  ox,oy ,
-					  bossTiles = [
-					  	bossCoords,
-					  	{x:bossCoords.x+1,y:bossCoords.y},
-					  	{x:bossCoords.x,y:bossCoords.y+1},
-					  	{x:bossCoords.x+1,y:bossCoords.y+1}
-					  ];
-				  _( bossTiles ).each( function( bossTile , i ){
-					ox = bossTile.x * tx ,
-					oy = bossTile.y * ty;
-					drawTile( ox , oy , ox + tx , oy + ty , 'boss' , +( altSwitch > 5 ) , ''+bossType , null , ''+i );
-				  } );
+					if( !Gauntlet.Boss.isActive() ){
+						return;
+					}
+					var bossCoords = Gauntlet.Boss.getPosition() ,
+						bossType = Gauntlet.Boss.getType() ,
+						ox,oy ,
+						bossTiles;
+					if(bossType===1){
+						bossTiles = [
+							bossCoords,
+							{x:bossCoords.x+1,y:bossCoords.y},
+							{x:bossCoords.x+2,y:bossCoords.y},
+							{x:bossCoords.x,y:bossCoords.y+1},
+							{x:bossCoords.x+1,y:bossCoords.y+1},
+							{x:bossCoords.x+2,y:bossCoords.y+1},
+							{x:bossCoords.x,y:bossCoords.y+2},
+							{x:bossCoords.x+1,y:bossCoords.y+2},
+							{x:bossCoords.x+2,y:bossCoords.y+2},
+							{x:bossCoords.x,y:bossCoords.y+3},
+							{x:bossCoords.x+1,y:bossCoords.y+3},
+							{x:bossCoords.x+2,y:bossCoords.y+3}
+						];
+					}else{
+						bossTiles = [
+							bossCoords,
+							{x:bossCoords.x+1,y:bossCoords.y},
+							{x:bossCoords.x,y:bossCoords.y+1},
+							{x:bossCoords.x+1,y:bossCoords.y+1}
+						];
+					}
+					_(bossTiles).each( function( bossTile , i ){
+						ox = bossTile.x * tx ,
+						oy = bossTile.y * ty;
+						drawTile( ox , oy , ox + tx , oy + ty , 'boss' , +( altSwitch > 5 ) , ''+bossType , null , ''+i );
+					} );
 				},
 				drawScene = function(path, data){
 					// load image and draw it into the canvas
 					var preload = new Image();
 					preload.onload = function(){
 						ctx.drawImage( preload , 0 , 0 );
-						_(data).each(function(dataItem,k){
-console.log(dataItem,k);
-						});
-					}
+					};
 					preload.src = path;
 				},
 				init = function(){

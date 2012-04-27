@@ -29,6 +29,11 @@
 					coords = loc;
 					type = t;
 					active = true;
+					if(type===1){
+						health = 50;
+						weaponSpeed = 2;
+						maxMissiles = 8;
+					}
 				},
 				/**
 				 * isActive
@@ -165,6 +170,9 @@
 					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( {x:coords.x,y:coords.y+1} ) );
 					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( {x:coords.x+1,y:coords.y} ) );
 					Gauntlet.Renderer.queueForUpdate( Gauntlet.Stage.getIndexFor( {x:coords.x+1,y:coords.y+1} ) );
+					if(type === 1){
+						Gauntlet.Game.completed();
+					}
 				};
 
 
